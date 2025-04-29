@@ -1,0 +1,316 @@
+.product-section {
+    padding: 50px 80px;
+    max-width: 1400px;
+    margin: 0 auto;
+    background-color: rgba(255, 255, 255, 0.96);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  }
+  
+  .section-title {
+    text-align: center;
+    font-size: 30px;
+    font-weight: 700;
+    color: #4caf50;
+    margin-bottom: 30px;
+  }
+  
+  .search-input {
+    width: 100%;
+    max-width: 700px;
+    padding: 14px 20px;
+    margin: 0 auto 40px;
+    display: block;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  }
+  
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Krijo 3 kolona */
+    gap: 30px;
+    justify-content: center;
+  }
+  
+  .product-card {
+    background-color: #fff;
+    padding: 24px;
+    border-radius: 16px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    text-align: center;
+    transition: transform 0.3s ease;
+  }
+  
+  .product-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .product-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 14px;
+  }
+  
+  .product-card h3 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 6px;
+    color: #222;
+  }
+  
+  .price {
+    font-weight: bold;
+    color: #4caf50;
+    margin-bottom: 6px;
+    font-size: 17px;
+  }
+  
+  .desc,
+  .fermer {
+    font-size: 15px;
+    color: #555;
+    margin-bottom: 4px;
+  }
+  
+  .button-group {
+    margin-top: 15px;
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  button {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  button:hover {
+    opacity: 0.95;
+  }
+  
+  button:first-child {
+    background-color: #4caf50;
+    color: white;
+  }
+  
+  button.secondary {
+    background-color: #e0e0e0;
+    color: #333;
+  }
+  
+  /* Responsiviteti */
+  @media (max-width: 1024px) {
+    .grid-container {
+      grid-template-columns: repeat(2, 1fr); /* Dy kolona në tablet */
+    }
+  }
+  
+  @media (max-width: 600px) {
+    .grid-container {
+      grid-template-columns: 1fr; /* Një kolonë në telefonat mobil */
+    }
+  
+    .search-input {
+      max-width: 100%;
+    }
+  }
+  
+  /* Ndryshime për dark mode */
+  body.dark .product-section {
+    background-color: rgba(34, 34, 34, 0.96);
+    color: #f0f0f0;
+  }
+  
+  body.dark .product-card {
+    background-color: #2b2b2b;
+    color: #ddd;
+  }
+  
+  body.dark .product-img {
+    border: 1px solid #444;
+  }
+  
+  body.dark .search-input {
+    background-color: #2a2a2a;
+    color: #eee;
+    border-color: #555;
+  }
+
+  
+.role-text {
+    font-size: 18px;
+    font-weight: bold;
+    color: #4CAF50; /* Ngjyra jeshile */
+    margin-right: 10px;
+    text-align: left; /* Rregullon rolin në të majtë */
+    margin-left: 20px; /* Hapësira në të majtë */
+  }
+  
+  .AppHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .AppHeader .logo {
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .controls {
+    display: flex;
+    gap: 15px;
+  }
+  body.dark {
+    background-color: #121212; /* Ndryshimi i ngjyrës së sfondit në temën e errësirës */
+    color: #e0e0e0; /* Ngjyra e tekstit për kontrast më të mirë */
+  }
+  
+  body.dark .AppHeader {
+    background-color: #1a1a1a; /* Ngjyrë më të errët për headerin */
+  }
+  
+  body.dark .AppHeader .logo {
+    color: #f5f5f5; /* Ngjyrë të bardhë për logon */
+  }
+  
+  body.dark .role-text {
+    color: #4caf50; /* Roli në jeshile */
+  }
+  
+  body.dark .search-input {
+    background-color: #605a5a; /* Ngjyrë më të errët për inputet */
+    color: #fff; /* Teksti i bardhë për kontrast */
+    border: 1px solid #555; /* Kufiri më i errët */
+  }
+  
+  body.dark .grid-container {
+    background-color: #1e1e1e; /* Background për seksionin e gridit */
+  }
+  
+  body.dark .product-card {
+    background-color: #2a2a2a; /* Ngjyrë më të errët për produktet */
+    color: #ddd; /* Ngjyra e tekstit për produktet */
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6); /* Hije më të theksuar */
+  }
+  
+  body.dark .product-img {
+    border: 1px solid #444; /* Kufiri i imazheve */
+  }
+  
+  body.dark button {
+    background-color: #4caf50; /* Ngjyrë jeshile për butonat */
+    color: white; /* Ngjyra e tekstit për butonat */
+  }
+  
+  body.dark button:hover {
+    background-color: #66bb6a; /* Ngjyra e butonave kur kalon mbi to */
+  }
+  
+  body.dark .section-title {
+    color: #4caf50; /* Ngjyrë jeshile për titujt */
+  }
+  
+  /* Përmirësimi i pamjes së butonave dhe inputeve */
+  button.secondary {
+    background-color: #444; /* Ngjyra e errët për butonat dytësorë */
+    color: #ccc; /* Teksti i butonave dytësorë */
+  }
+  
+  body.dark .button-group button {
+    background-color: #333; /* Ngjyra e errët për butonat në grup */
+    color: #ddd; /* Tekst i bardhë për kontrast të mirë */
+  }
+  
+  /* Përmirësimi i pamjes së grid-it për produktet */
+  body.dark .grid-container {
+    background-color: #1a1a1a;
+  }
+  
+  body.dark .product-card:hover {
+    transform: scale(1.05); /* Efekti i hover për produktet */
+  }
+  
+  body.dark .search-input {
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #555;
+  }
+  body.dark .product-card h3 {
+    color: #f5f5f5; /* Ngjyra e bardhë për emrin e produktit */
+  }
+  
+  body.dark .product-card .desc {
+    color: #e0e0e0; /* Ngjyra gri për përshkrimin */
+    font-size: 16px; /* Sigurohuni që përshkrimi të jetë i lexueshëm */
+  }
+  
+  body.dark .product-card .price {
+    color: #4caf50; /* Ngjyrë jeshile për çmimin */
+  }
+  
+  body.dark .product-card .fermer {
+    color: #a0a0a0; /* Ngjyrë gri për informacionin rreth fermerit */
+  }
+  body.dark .button-group button {
+    background-color: #4caf50; /* Ngjyra jeshile për butonat */
+    color: white; /* Tekst i bardhë për kontrast */
+  }
+  
+  body.dark .button-group button:hover {
+    background-color: #66bb6a; /* Ton më të ndritshëm kur kaloni mbi buton */
+  }
+  body.dark .product-card {
+    background-color: #333; /* Ngjyra më e errët për sfondin e kartelës së produktit */
+    border: 2px solid #555; /* Kufiri më i dukshëm */
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3); /* Hije më e theksuar */
+  }
+  body.dark .search-input {
+    background-color: #333; /* Ngjyra e errët për fushat e kërkimit */
+    color: #fff; /* Tekst i bardhë për kërkimin */
+    border: 1px solid #555; /* Kufiri i errët */
+  }
+  
+  body.dark .search-input::placeholder {
+    color: #bbb; /* Ngjyra gri për tekstin e sugjeruar në input */
+  }
+  .message-input {
+    width: 100%;
+    padding: 10px;
+    margin: 15px 0;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+    min-height: 100px;
+  }
+  
+  button {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  button:hover {
+    opacity: 0.95;
+  }
+  
+  button.secondary {
+    background-color: #e0e0e0;
+    color: #333;
+  }
+          

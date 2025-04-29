@@ -1,0 +1,279 @@
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+}
+
+.AppLayout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.AppHeader {
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: bold;
+  color: #1a1a1a;
+  transition: color 0.3s ease;
+}
+.logo:hover {
+  transform: scale(1.05);
+  letter-spacing: 1px;
+}
+
+body.dark .logo {
+  color: #f8f8f8;
+}
+
+.controls button {
+  margin-left: 10px;
+  background-color: #7a9454;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+.controls button:hover {
+  background-color: #6c844a;
+  transform: scale(1.05);
+}
+
+.MainBackground {
+  flex: 1;
+  background-image: url('/public/images/market.png'); /* kjo është e saktë për React */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  position: relative;
+}
+
+.MainBackground::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.7);
+  z-index: 0;
+}
+
+body.dark .MainBackground::before {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.MainBackground > * {
+  z-index: 1;
+}
+
+.auth-wrapper {
+  width: 100%;
+  max-width: 420px;
+  padding: 40px;
+  border-radius: 20px;
+  background-color: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.8s ease;
+  transition: all 0.3s ease-in-out;
+}
+
+body.dark .auth-wrapper {
+  background-color: rgba(30, 30, 30, 0.96);
+  box-shadow: 0 8px 30px rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(5px);
+}
+
+/* Titulli */
+.auth-card h2 {
+  text-align: center;
+  font-size: 28px;
+  margin-bottom: 25px;
+  text-transform: capitalize;
+  letter-spacing: 0.5px;
+  color: #4caf50;
+  transition: color 0.3s ease-in-out;
+}
+
+body.dark .auth-card h2 {
+  color: #f5f5f5;
+}
+
+/* Forma */
+.auth-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.auth-card input {
+  background-color: #ffffff;
+  border: 1px solid rgba(200, 200, 200, 0.5);
+  border-radius: 10px;
+  padding: 12px 15px;
+  font-size: 16px;
+  color: #000;
+  transition: all 0.3s ease-in-out;
+}
+
+.auth-card input:focus {
+  border-color: #4caf50;
+  outline: none;
+}
+
+body.dark input[type="text"],
+body.dark input[type="password"],
+body.dark textarea {
+  background-color: #2a2a2a;
+  border: 1px solid #555;
+  color: #f5f5f5;
+}
+body.dark input::placeholder {
+  color: #ccc;
+}
+
+/* Butoni */
+.auth-card button {
+  background-color: #336633;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.auth-card button:hover {
+  background-color: #285c28;
+}
+
+/* Radio Buttons */
+.radio-group {
+  display: flex;
+  justify-content: space-around;
+  margin: 10px 0;
+}
+.radio-group label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  color: inherit;
+}
+.radio-group input[type="radio"] {
+  accent-color: #4caf50;
+}
+body.dark .radio-group label {
+  color: #eee;
+}
+
+/* Seksioni i regjistrimit */
+.register-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-top: 20px;
+}
+.register-section span {
+  font-size: 14px;
+  color: inherit;
+}
+body.dark .register-section span {
+  color: #ddd;
+}
+.register-section button {
+  background-color: #336633;
+  color: white;
+  font-weight: bold;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  text-decoration: none;
+}
+.register-section button:hover {
+  background-color: #285c28;
+}
+
+/* Vija ndarëse */
+hr {
+  margin: 20px 0;
+  border: 0;
+  border-top: 1px solid #ccc;
+}
+body.dark hr {
+  border-top: 1px solid #444;
+}
+
+/* Animacion hyrjeje */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 600px) {
+  .AppHeader {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+    padding: 15px;
+  }
+
+  .AppHeader .logo {
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .AppHeader p {
+    margin: 0;
+    font-size: 15px;
+  }
+
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .controls button {
+    min-width: 90px;
+    font-size: 14px;
+    padding: 8px 12px;
+    flex: 1 1 auto;
+    text-align: center;
+  }
+
+  .controls .dark-toggle {
+    width: 100%;
+    font-size: 15px;
+    padding: 10px 12px;
+    text-align: center;
+    margin-top: 8px;
+  }
+}

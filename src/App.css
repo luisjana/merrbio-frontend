@@ -1,0 +1,111 @@
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+}
+
+.AppLayout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.AppHeader {
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.controls button {
+  margin-left: 10px;
+  background-color: #7a9454;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.controls button:hover {
+  background-color: #6c844a;
+  transform: scale(1.05);
+  transition: all 0.2s ease-in-out;
+}
+
+.MainBackground {
+  flex: 1;
+  background-image: url('/public/images/market.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  position: relative;
+}
+
+.MainBackground::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.7);
+  z-index: 0;
+}
+
+.MainBackground > * {
+  z-index: 1;
+}
+.controls {
+  display: flex;
+  gap: 15px;
+}
+
+.rounded-btn {
+  background-color: #7a9454;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.rounded-btn:hover {
+  background-color: #6c844a;
+}
+.MainContent {
+  flex: 1;
+  background-color: #f9f9f9;
+  padding: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+body.dark .MainContent {
+  background-color: #121212;
+}
+.consumer-panel {
+  margin-top: 20px;
+}
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: 20px;
+}
+
+.danger {
+  background-color: #8f4e4e;
+}

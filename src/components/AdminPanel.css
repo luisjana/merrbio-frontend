@@ -1,0 +1,134 @@
+.admin-panel {
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    margin: 30px auto;
+    max-width: 1300px;
+  }
+  
+  .admin-panel h2 {
+    font-size: 30px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #4caf50;
+  }
+  
+  .admin-panel h3 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .admin-panel .user-list,
+  .admin-panel .add-user {
+    flex: 1;
+    min-width: 300px;
+  }
+  
+  .user-list {
+    margin-right: 20px;
+  }
+  
+  .admin-panel ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .admin-panel li {
+    background-color: #fff;
+    padding: 18px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  }
+  
+  .admin-panel button {
+    background-color: #4caf50;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+  }
+  
+  .admin-panel button:hover {
+    background-color: #45a049;
+  }
+  
+  .admin-panel form {
+    background-color: #fff;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .admin-panel form input,
+  .admin-panel form select {
+    padding: 12px 15px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    width: 100%;
+  }
+  
+  .admin-panel form button {
+    background-color: #4caf50;
+    color: white;
+    padding: 12px;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .admin-panel form button:hover {
+    background-color: #45a049;
+  }
+  
+  /* Responsiveness */
+  @media (max-width: 768px) {
+    .admin-panel {
+      flex-direction: column;
+    }
+  
+    .admin-panel form {
+      flex: unset;
+    }
+  }
+  /* Stilimi i butonit për ndryshimin e gjuhës */
+.language-toggle {
+    position: fixed; /* E vendosim të pozicionuar në mënyrë fikse */
+    top: 20px; /* Larguar 20px nga maja */
+    right: 20px; /* Larguar 20px nga e djathta */
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    z-index: 1000; /* Siguron që butoni është në krye */
+  }
+  
+  .language-toggle:hover {
+    background-color: #45a049;
+  }
+  
+  /* Për të siguruar që admin panel të shfaqet normal */
+  .admin-panel {
+    padding-top: 60px; /* Largimi nga maja për të shmangur butonin */
+  }
+  
