@@ -15,10 +15,12 @@ function AddProduct({ lang }) {
     e.preventDefault();
 
     const formData = new FormData();
+    const username = localStorage.getItem('username');
     formData.append('emri', emri);
     formData.append('pershkrimi', pershkrimi);
     formData.append('cmimi', cmimi);
-    formData.append('fermeri', 'fermer1');  // mund ta merrni nga login
+    formData.append('fermeri', username);
+    
     if (image) {
       formData.append('image', image);  // shto fotoja për upload
     }
