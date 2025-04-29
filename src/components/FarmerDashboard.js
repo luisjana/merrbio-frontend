@@ -8,10 +8,10 @@ function FarmerDashboard({ lang }) {
   const handleRefresh = () => setRefresh(prev => !prev);
 
   return (
-    <>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '30px' }}>
       <AddProduct lang={lang} onProductAdded={handleRefresh} />
       <FarmerProductManager lang={lang} refresh={refresh} />
-    </>
+    </div>
   );
 }
 
