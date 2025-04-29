@@ -1,8 +1,7 @@
-// src/components/FarmerDashboard.js
 import React, { useState } from 'react';
 import AddProduct from './AddProduct';
 import FarmerProductManager from './FarmerProductManager';
-import './FarmerDashboard.css'; // Sigurohu që e importon stilin
+import './FarmerDashboard.css';
 
 function FarmerDashboard({ lang }) {
   const [refresh, setRefresh] = useState(false);

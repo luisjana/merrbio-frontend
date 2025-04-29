@@ -76,7 +76,7 @@ function FarmerProductManager({ lang, refresh }) {
   return (
     <div>
       <h2>{t('Produktet e mia', 'My Products')}</h2>
-      <div className="product-list">
+      <div className="product-grid">
         {products.map(p => (
           <div key={p.id} className="product-card">
             {editingId === p.id ? (
