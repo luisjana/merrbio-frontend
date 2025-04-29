@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './FarmerProductManager.css';
+import './FarmerProductManager.css'; // Nëse ke stilizime
 
-function FarmerProductManager({ lang }) {
+function FarmerProductManager({ lang, refresh }) {
   const [products, setProducts] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [editedProduct, setEditedProduct] = useState({ emri: '', pershkrimi: '', cmimi: '', image: null, preview: null });
@@ -19,7 +19,7 @@ function FarmerProductManager({ lang }) {
         setProducts(myProducts);
       })
       .catch(err => console.error('Gabim gjatë marrjes së produkteve:', err));
-  }, [username]);
+  }, [username, refresh]);
 
   const handleEditClick = (product) => {
     setEditingId(product.id);
@@ -36,7 +36,7 @@ function FarmerProductManager({ lang }) {
     setEditedProduct(prev => ({
       ...prev,
       image: file,
-      preview: URL.createObjectURL(file)  // ✅ Preview direkt
+      preview: URL.createObjectURL(file)
     }));
   };
 
@@ -53,19 +53,7 @@ function FarmerProductManager({ lang }) {
       });
 
       alert(t('Produkti u përditësua!', 'Product updated!'));
-      setProducts(products.map(p => (
-        p.id === editingId
-          ? {
-              ...p,
-              emri: editedProduct.emri,
-              pershkrimi: editedProduct.pershkrimi,
-              cmimi: editedProduct.cmimi,
-              image: editedProduct.image ? `/uploads/${editedProduct.image.name}` : p.image
-            }
-          : p
-      )));
       setEditingId(null);
-      
     } catch (err) {
       console.error('Gabim gjatë përditësimit:', err);
       alert(t('Gabim gjatë përditësimit!', 'Error updating product!'));

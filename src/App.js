@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
-import AddProduct from './components/AddProduct';
 import Auth from './components/Auth';
 import AdminPanel from './components/AdminPanel';
 import ConsumerPanel from './components/ConsumerPanel';
+import FarmerDashboard from './components/FarmerDashboard';
 
-import { AppContext } from './context/AppContext'; // import contextin
-import FarmerProductManager from './components/FarmerProductManager';
+import { AppContext } from './context/AppContext';
 
 import './components/style.css';
 import './App.css';
@@ -16,7 +15,7 @@ function App() {
   const [role, setRole] = useState(null);
   const [username, setUsername] = useState(null);
 
-  const { lang, setLang, dark, setDark } = useContext(AppContext); // Merr lang dhe dark nga Context
+  const { lang, setLang, dark, setDark } = useContext(AppContext);
 
   useEffect(() => {
     const savedRole = localStorage.getItem('role');
@@ -81,14 +80,7 @@ function App() {
               />
             ) : (
               <>
-              {role === 'fermer' && (
-                <Route path="/" element={
-                <>
-                <AddProduct lang={lang} />
-                 <FarmerProductManager lang={lang} />
-               </>
-                } />
-                )}
+                {role === 'fermer' && <Route path="/" element={<FarmerDashboard lang={lang} />} />}
                 {role === 'admin' && <Route path="/" element={<AdminPanel />} />}
                 {role === 'konsumator' && <Route path="/" element={<ConsumerPanel role={role} />} />}
                 <Route path="*" element={<Navigate to="/" />} />

@@ -5,40 +5,36 @@ function AddProduct({ lang }) {
   const [emri, setEmri] = useState('');
   const [pershkrimi, setPershkrimi] = useState('');
   const [cmimi, setCmimi] = useState('');
-  const [image, setImage] = useState(null); // për foton
+  const [image, setImage] = useState(null);
 
   const handleImageChange = (e) => {
-    setImage(e.target.files[0]); // ruan imazhin që përdoruesi ngarkon
+    setImage(e.target.files[0]);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
     const formData = new FormData();
     const username = localStorage.getItem('username');
+
     formData.append('emri', emri);
     formData.append('pershkrimi', pershkrimi);
     formData.append('cmimi', cmimi);
     formData.append('fermeri', username);
-    
-    if (image) {
-      formData.append('image', image);  // shto fotoja për upload
-    }
+    if (image) formData.append('image', image);
 
-    axios.post('https://merrbio-backend.onrender.com/products', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data', // mundëson dërgimin e file-it
-      }
-    }).then(res => {
+    try {
+      const res = await axios.post('https://merrbio-backend.onrender.com/products', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
       alert(res.data.message);
       setEmri('');
       setPershkrimi('');
       setCmimi('');
-      setImage(null);  // Pas suksesit, reseto fushën e imazhit
-    }).catch(err => {
+      setImage(null);
+    } catch (err) {
       console.error(err);
-      alert("Gabim gjatë ngarkimit të produktit");
-    });
+      alert('Gabim gjatë ngarkimit të produktit');
+    }
   };
 
   return (
@@ -65,11 +61,7 @@ function AddProduct({ lang }) {
           onChange={(e) => setCmimi(e.target.value)}
           required
         />
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleImageChange}
-        />
+        <input type="file" accept="image/*" onChange={handleImageChange} />
         <button type="submit">{lang === 'sq' ? 'Shto' : 'Add'}</button>
       </form>
     </div>
