@@ -7,7 +7,9 @@ function ConsumerPanel({ role, lang }) {
   const [searchTerm, setSearchTerm] = useState('');
 
   const t = (sq, en) => (lang === 'sq' ? sq : en);
-
+  const username = localStorage.getItem('username');
+  const role = localStorage.getItem('role');
+  
   // FUNKSION për përkthim automatik me LibreTranslate
   const translateText = async (text, targetLang = 'en') => {
     try {

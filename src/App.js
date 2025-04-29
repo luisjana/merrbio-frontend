@@ -7,6 +7,7 @@ import AdminPanel from './components/AdminPanel';
 import ConsumerPanel from './components/ConsumerPanel';
 
 import { AppContext } from './context/AppContext'; // import contextin
+import FarmerProductManager from './components/FarmerProductManager';
 
 import './components/style.css';
 import './App.css';
@@ -80,7 +81,14 @@ function App() {
               />
             ) : (
               <>
-                {role === 'fermer' && <Route path="/" element={<AddProduct />} />}
+              {role === 'fermer' && (
+                <Route path="/" element={
+                <>
+                <AddProduct lang={lang} />
+                 <FarmerProductManager lang={lang} />
+               </>
+                } />
+                )}
                 {role === 'admin' && <Route path="/" element={<AdminPanel />} />}
                 {role === 'konsumator' && <Route path="/" element={<ConsumerPanel role={role} />} />}
                 <Route path="*" element={<Navigate to="/" />} />
