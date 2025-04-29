@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-function AddProduct({ lang }) {
+function AddProduct({ lang, onProductAdded }) {
   const [emri, setEmri] = useState('');
   const [pershkrimi, setPershkrimi] = useState('');
   const [cmimi, setCmimi] = useState('');
@@ -31,6 +31,8 @@ function AddProduct({ lang }) {
       setPershkrimi('');
       setCmimi('');
       setImage(null);
+
+      if (onProductAdded) onProductAdded(); // 🆕
     } catch (err) {
       console.error(err);
       alert('Gabim gjatë ngarkimit të produktit');
