@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './FarmerProductManager.css'; // Nëse ke stilizime
+import './FarmerProductManager.css';
 
 function FarmerProductManager({ lang, refresh }) {
   const [products, setProducts] = useState([]);
@@ -8,7 +8,6 @@ function FarmerProductManager({ lang, refresh }) {
   const [editedProduct, setEditedProduct] = useState({ emri: '', pershkrimi: '', cmimi: '', image: null, preview: null });
 
   const username = localStorage.getItem('username');
-
   const t = (sq, en) => (lang === 'sq' ? sq : en);
 
   useEffect(() => {
@@ -74,7 +73,7 @@ function FarmerProductManager({ lang, refresh }) {
   };
 
   return (
-    <div>
+    <div className="farmer-product-section">
       <h2>{t('Produktet e mia', 'My Products')}</h2>
       <div className="product-grid">
         {products.map(p => (
@@ -128,7 +127,6 @@ function FarmerProductManager({ lang, refresh }) {
                   <img
                     src={`https://merrbio-backend.onrender.com${p.image}`}
                     alt="foto"
-                    style={{ width: '100px', marginTop: '10px', borderRadius: '8px' }}
                   />
                 )}
                 <div style={{ marginTop: '10px' }}>
