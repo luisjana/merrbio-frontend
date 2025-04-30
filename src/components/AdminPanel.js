@@ -7,12 +7,10 @@ function AdminPanel() {
   const [newUser, setNewUser] = useState({ username: '', password: '', role: 'konsumator' });
   const [loading, setLoading] = useState(false);
 
-  const { lang, setLang } = useContext(AppContext); // Merr lang nga context
-
+  const { lang } = useContext(AppContext); // vetem lang — jo setLang sepse nuk na duhet këtu
   const currentUser = localStorage.getItem('username');
 
   useEffect(() => {
-    // Merr të gjithë përdoruesit, përveç adminit aktual
     axios.get('https://merrbio-backend.onrender.com/users')
       .then(res => setUsers(res.data.filter(user => user.username !== currentUser)))
       .catch(err => console.error('Gabim në marrjen e përdoruesve:', err));
@@ -21,9 +19,7 @@ function AdminPanel() {
   const handleAddUser = async () => {
     setLoading(true);
     try {
-      console.log(newUser);
       const res = await axios.post('https://merrbio-backend.onrender.com/users', newUser);
-      console.log(res.data);
       alert(res.data.message);
       setNewUser({ username: '', password: '', role: 'konsumator' });
       const usersResponse = await axios.get('https://merrbio-backend.onrender.com/users');
@@ -51,12 +47,6 @@ function AdminPanel() {
 
   return (
     <div className="admin-panel">
-      <div className="language-switch">
-        <button onClick={() => setLang(lang === 'sq' ? 'en' : 'sq')}>
-          {lang === 'sq' ? 'Kaloni në Anglisht' : 'Switch to Albanian'}
-        </button>
-      </div>
-
       <div className="user-list">
         <h2>{t('📋 Paneli i Adminit', '📋 Admin Panel')}</h2>
         <h3>{t('Përdoruesit:', 'Users:')}</h3>

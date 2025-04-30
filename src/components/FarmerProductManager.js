@@ -127,12 +127,13 @@ function FarmerProductManager({ lang, refresh, setRefresh = () => {} }) {
                 <p>{p.pershkrimi}</p>
                 <p>{p.cmimi} lek</p>
                 {p.image && (
-                  <img
-                    src={p.image}
-                    alt="foto"
-                    style={{ width: '100px', borderRadius: '6px' }}
-                  />
-                )}
+                <img
+                src={p.image} // ✅ Cloudinary jep URL absolute, kjo është e mjaftueshme
+               alt="foto"
+                   style={{ width: '100px', marginTop: '10px', borderRadius: '8px' }}
+                   />
+                 )}
+
                 <div style={{ marginTop: '10px' }}>
                   <button onClick={() => handleEditClick(p)}>{t('Ndrysho', 'Edit')}</button>
                   <button onClick={() => handleDelete(p.id)} style={{ marginLeft: '10px' }}>
