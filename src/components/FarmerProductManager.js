@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './FarmerProductManager.css';
 
-function FarmerProductManager({ lang, refresh }) {
+function FarmerProductManager({ lang, refresh, setRefresh = () => {} }) {
   const [products, setProducts] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [editedProduct, setEditedProduct] = useState({ emri: '', pershkrimi: '', cmimi: '', image: null, preview: null });
