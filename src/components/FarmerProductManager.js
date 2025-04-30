@@ -126,11 +126,12 @@ function FarmerProductManager({ lang, refresh, setRefresh = () => {} }) {
                 <p>{p.pershkrimi}</p>
                 <p>{p.cmimi} lek</p>
                 {p.image && (
-                  <img
-                    src={`https://merrbio-backend.onrender.com${p.image}`}
-                    alt="foto"
-                  />
-                )}
+               <img
+                src={p.image}
+                alt="foto"
+                 />
+                 )}
+
                 <div style={{ marginTop: '10px' }}>
                   <button onClick={() => handleEditClick(p)}>{t('Ndrysho', 'Edit')}</button>
                   <button onClick={() => handleDelete(p.id)} style={{ marginLeft: '10px' }}>
