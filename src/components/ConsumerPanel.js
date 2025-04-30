@@ -29,9 +29,10 @@ function ConsumerPanel({ role }) {
       .then(res => alert(res.data.message));
   };
 
-  const handleMessage = (product) => {
-    alert(t('Hapet dritarja për mesazh te', 'Open chat window to') + ' ' + product.fermeri);
-  };
+  // ✅ Butoni për mesazh është hequr — nuk përdoret më:
+  // const handleMessage = (product) => {
+  //   alert(t('Hapet dritarja për mesazh te', 'Open chat window to') + ' ' + product.fermeri);
+  // };
 
   return (
     <div className="product-section">
@@ -52,7 +53,7 @@ function ConsumerPanel({ role }) {
             <div className="product-card" key={i}>
               {p.image && (
                 <img
-                  src={`https://merrbio-backend.onrender.com${p.image}`}
+                  src={p.image}
                   alt={p.emri}
                   className="product-img"
                 />
@@ -65,8 +66,10 @@ function ConsumerPanel({ role }) {
               <div className="button-group">
                 {(role === 'konsumator' || !role) && (
                   <>
-                    <button onClick={() => handleRequest(p)}>{t('Bëj kërkesë për blerje', 'Request to Buy')}</button>
-                    <button className="secondary" onClick={() => handleMessage(p)}>{t('Dërgo mesazh', 'Send Message')}</button>
+                    <button onClick={() => handleRequest(p)}>
+                      {t('Bëj kërkesë për blerje', 'Request to Buy')}
+                    </button>
+                    {/* ❌ Butoni "Dërgo mesazh" u hoq për kërkesën tënde */}
                   </>
                 )}
               </div>
