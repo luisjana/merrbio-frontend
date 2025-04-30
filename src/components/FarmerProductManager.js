@@ -46,18 +46,20 @@ function FarmerProductManager({ lang, refresh }) {
       formData.append('pershkrimi', editedProduct.pershkrimi);
       formData.append('cmimi', editedProduct.cmimi);
       if (editedProduct.image) formData.append('image', editedProduct.image);
-
+  
       await axios.put(`https://merrbio-backend.onrender.com/products/${editingId}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
-
+  
       alert(t('Produkti u përditësua!', 'Product updated!'));
       setEditingId(null);
+      setRefresh(prev => !prev); // ✅ rifreskon produktet
     } catch (err) {
       console.error('Gabim gjatë përditësimit:', err);
       alert(t('Gabim gjatë përditësimit!', 'Error updating product!'));
     }
   };
+  
 
   const handleDelete = async (id) => {
     if (window.confirm(t('A jeni të sigurt që dëshironi ta fshini këtë produkt?', 'Are you sure you want to delete this product?'))) {
