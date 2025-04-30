@@ -45,6 +45,7 @@ function FarmerProductManager({ lang, refresh, setRefresh = () => {} }) {
       formData.append('emri', editedProduct.emri);
       formData.append('pershkrimi', editedProduct.pershkrimi);
       formData.append('cmimi', editedProduct.cmimi);
+      formData.append('fermeri', username); // ✅ u shtua
       if (editedProduct.image) formData.append('image', editedProduct.image);
   
       await axios.put(`https://merrbio-backend.onrender.com/products/${editingId}`, formData, {
@@ -53,7 +54,7 @@ function FarmerProductManager({ lang, refresh, setRefresh = () => {} }) {
   
       alert(t('Produkti u përditësua!', 'Product updated!'));
       setEditingId(null);
-      setRefresh(prev => !prev); // ✅ rifreskon produktet
+      setRefresh(prev => !prev);
     } catch (err) {
       console.error('Gabim gjatë përditësimit:', err);
       alert(t('Gabim gjatë përditësimit!', 'Error updating product!'));
@@ -126,12 +127,12 @@ function FarmerProductManager({ lang, refresh, setRefresh = () => {} }) {
                 <p>{p.pershkrimi}</p>
                 <p>{p.cmimi} lek</p>
                 {p.image && (
-               <img
-                src={p.image}
-                alt="foto"
-                 />
-                 )}
-
+                  <img
+                    src={p.image}
+                    alt="foto"
+                    style={{ width: '100px', borderRadius: '6px' }}
+                  />
+                )}
                 <div style={{ marginTop: '10px' }}>
                   <button onClick={() => handleEditClick(p)}>{t('Ndrysho', 'Edit')}</button>
                   <button onClick={() => handleDelete(p.id)} style={{ marginLeft: '10px' }}>
