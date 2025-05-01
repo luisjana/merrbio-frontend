@@ -12,11 +12,18 @@ function AddProduct({ onProductAdded }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const fermeri = localStorage.getItem('username');
+    if (!fermeri) {
+      alert('Ju lutem kyçuni për të shtuar produkt.');
+      return;
+    }
+
     const formData = new FormData();
     formData.append('emri', emri);
     formData.append('pershkrimi', pershkrimi);
     formData.append('cmimi', cmimi);
-    formData.append('fermeri', localStorage.getItem('username'));
+    formData.append('fermeri', fermeri);
     if (image) formData.append('image', image);
 
     try {
@@ -24,15 +31,18 @@ function AddProduct({ onProductAdded }) {
       await axios.post('https://merrbio-backend.onrender.com/products', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
+
+      alert('Produkti u shtua me sukses!');
       setEmri('');
       setPershkrimi('');
       setCmimi('');
       setImage(null);
       document.getElementById('imageInput').value = '';
+
       if (onProductAdded) onProductAdded();
     } catch (err) {
-      console.error(err);
-      alert('Error uploading product');
+      console.error('Gabim gjatë shtimit të produktit:', err);
+      alert('Gabim gjatë ngarkimit të produktit.');
     } finally {
       setLoading(false);
     }
@@ -40,11 +50,35 @@ function AddProduct({ onProductAdded }) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <input value={emri} onChange={(e) => setEmri(e.target.value)} placeholder="Emri" required />
-      <textarea value={pershkrimi} onChange={(e) => setPershkrimi(e.target.value)} placeholder="Pershkrimi" required />
-      <input value={cmimi} type="number" onChange={(e) => setCmimi(e.target.value)} placeholder="Cmimi" required />
-      <input type="file" accept="image/*" onChange={handleImageChange} id="imageInput" />
-      <button type="submit" disabled={loading}>{loading ? 'Duke u ngarkuar...' : 'Shto'}</button>
+      <input
+        value={emri}
+        onChange={(e) => setEmri(e.target.value)}
+        placeholder="Emri"
+        required
+      />
+      <textarea
+        value={pershkrimi}
+        onChange={(e) => setPershkrimi(e.target.value)}
+        placeholder="Përshkrimi"
+        required
+      />
+      <input
+        value={cmimi}
+        type="number"
+        onChange={(e) => setCmimi(e.target.value)}
+        placeholder="Çmimi"
+        required
+      />
+      <input
+        type="file"
+        accept="image/*"
+        onChange={handleImageChange}
+        id="imageInput"
+        required
+      />
+      <button type="submit" disabled={loading}>
+        {loading ? 'Duke u ngarkuar...' : 'Shto'}
+      </button>
     </form>
   );
 }
