@@ -8,7 +8,6 @@ function ProductList({ lang, role, onRequest, onMessage }) {
 
   const t = (sq, en) => (lang === 'sq' ? sq : en);
 
-  // Funksion për përkthim me LibreTranslate
   const translateText = async (text, targetLang = 'en') => {
     try {
       const res = await fetch('https://libretranslate.de/translate', {
@@ -30,7 +29,6 @@ function ProductList({ lang, role, onRequest, onMessage }) {
     }
   };
 
-  // Merr produktet nga backend dhe përkthe nëse është anglisht
   useEffect(() => {
     axios
       .get('https://merrbio-backend.onrender.com/products')
@@ -82,7 +80,7 @@ function ProductList({ lang, role, onRequest, onMessage }) {
             <div className="product-card" key={i}>
               {p.image && (
                 <img
-                  src={`https://merrbio-backend.onrender.com${p.image}`}
+                  src={p.image.startsWith('http') ? p.image : `https://merrbio-backend.onrender.com${p.image}`}
                   alt={lang === 'en' ? p.emri_en : p.emri}
                   className="product-img"
                 />

@@ -37,12 +37,14 @@ function AddProduct({ lang, onProductAdded }) {
       document.getElementById('imageInput').value = ''; // 🆕 reset file input
 
       if (onProductAdded) onProductAdded();
-    } catch (err) {
-      console.error(err);
-      alert(lang === 'sq' ? 'Gabim gjatë ngarkimit të produktit' : 'Error uploading product');
-    } finally {
-      setLoading(false); // 🆕 stop loading
+    }  catch (err) {
+      console.error(err.response?.data || err);
+      alert(
+        (err.response?.data?.message || 'Gabim gjatë ngarkimit të produktit') +
+        (lang === 'sq' ? '' : ' (Error uploading product)')
+      );
     }
+    
   };
 
   return (
