@@ -6,6 +6,7 @@ function AddProduct({ lang, onProductAdded }) {
   const [pershkrimi, setPershkrimi] = useState('');
   const [cmimi, setCmimi] = useState('');
   const [image, setImage] = useState(null);
+  const [loading, setLoading] = useState(false); // 🆕
 
   const handleImageChange = (e) => {
     setImage(e.target.files[0]);
@@ -23,19 +24,24 @@ function AddProduct({ lang, onProductAdded }) {
     if (image) formData.append('image', image);
 
     try {
+      setLoading(true); // 🆕 show loading
       const res = await axios.post('https://merrbio-backend.onrender.com/products', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
+
       alert(res.data.message);
       setEmri('');
       setPershkrimi('');
       setCmimi('');
       setImage(null);
+      document.getElementById('imageInput').value = ''; // 🆕 reset file input
 
-      if (onProductAdded) onProductAdded(); // 🆕
+      if (onProductAdded) onProductAdded();
     } catch (err) {
       console.error(err);
-      alert('Gabim gjatë ngarkimit të produktit');
+      alert(lang === 'sq' ? 'Gabim gjatë ngarkimit të produktit' : 'Error uploading product');
+    } finally {
+      setLoading(false); // 🆕 stop loading
     }
   };
 
@@ -63,8 +69,21 @@ function AddProduct({ lang, onProductAdded }) {
           onChange={(e) => setCmimi(e.target.value)}
           required
         />
-        <input type="file" accept="image/*" onChange={handleImageChange} />
-        <button type="submit">{lang === 'sq' ? 'Shto' : 'Add'}</button>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleImageChange}
+          id="imageInput"
+        />
+        <button type="submit" disabled={loading}>
+          {loading
+            ? lang === 'sq'
+              ? 'Duke u ngarkuar...'
+              : 'Uploading...'
+            : lang === 'sq'
+            ? 'Shto'
+            : 'Add'}
+        </button>
       </form>
     </div>
   );

@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './ConsumerPanel.css';
+import './ProductList.css';
 
-function ConsumerPanel({ role, lang }) {
+function ProductList({ lang, role, onRequest, onMessage }) {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
 
   const t = (sq, en) => (lang === 'sq' ? sq : en);
-  const username = localStorage.getItem('username');
-  const role = localStorage.getItem('role');
-  
-  // FUNKSION për përkthim automatik me LibreTranslate
+
+  // Funksion për përkthim me LibreTranslate
   const translateText = async (text, targetLang = 'en') => {
     try {
       const res = await fetch('https://libretranslate.de/translate', {
@@ -28,20 +26,20 @@ function ConsumerPanel({ role, lang }) {
       return data.translatedText;
     } catch (err) {
       console.error('Gabim gjatë përkthimit:', err);
-      return text; // fallback nëse ndodh ndonjë gabim
+      return text;
     }
   };
 
-  // Merr produktet dhe përkthe nëse gjuha është anglisht
+  // Merr produktet nga backend dhe përkthe nëse është anglisht
   useEffect(() => {
     axios
       .get('https://merrbio-backend.onrender.com/products')
-      .then(async res => {
+      .then(async (res) => {
         const produktet = res.data || [];
 
         if (lang === 'en') {
           const translated = await Promise.all(
-            produktet.map(async p => {
+            produktet.map(async (p) => {
               const emri_en = await translateText(p.emri);
               const pershkrimi_en = await translateText(p.pershkrimi);
               return { ...p, emri_en, pershkrimi_en };
@@ -52,22 +50,15 @@ function ConsumerPanel({ role, lang }) {
           setProducts(produktet);
         }
       })
-      .catch(err => console.error('Gabim në ngarkimin e produkteve:', err));
+      .catch((err) => console.error('Gabim në ngarkimin e produkteve:', err));
   }, [lang]);
 
   const handleRequest = (product) => {
-    const konsumatori = prompt(t('Shkruaj emrin tënd dhe nr kontakti:', 'Enter your name and number:'));
-    axios
-      .post('https://merrbio-backend.onrender.com/requests', {
-        produkti: product.emri,
-        fermeri: product.fermeri,
-        konsumatori: konsumatori || 'anonim',
-      })
-      .then(res => alert(res.data.message));
+    if (onRequest) onRequest(product);
   };
 
   const handleMessage = (product) => {
-    alert(t('Hapet dritarja për mesazh te', 'Open chat window to') + ' ' + product.fermeri);
+    if (onMessage) onMessage(product);
   };
 
   return (
@@ -84,7 +75,7 @@ function ConsumerPanel({ role, lang }) {
 
       <div className="grid-container">
         {products
-          .filter(p =>
+          .filter((p) =>
             (lang === 'en' ? p.emri_en : p.emri)?.toLowerCase().includes(searchTerm.toLowerCase())
           )
           .map((p, i) => (
@@ -99,20 +90,20 @@ function ConsumerPanel({ role, lang }) {
               <h3>{lang === 'en' ? p.emri_en : p.emri}</h3>
               <p className="price">{p.cmimi} lek</p>
               <p className="desc">{lang === 'en' ? p.pershkrimi_en : p.pershkrimi}</p>
-              <p className="fermer">{t('nga', 'by')}: {p.fermeri}</p>
+              <p className="fermer">
+                {t('nga', 'by')}: {p.fermeri}
+              </p>
 
-              <div className="button-group">
-                {(role === 'konsumator' || !role) && (
-                  <>
-                    <button onClick={() => handleRequest(p)}>
-                      {t('Bëj kërkesë për blerje', 'Request to Buy')}
-                    </button>
-                    <button className="secondary" onClick={() => handleMessage(p)}>
-                      {t('Dërgo mesazh', 'Send Message')}
-                    </button>
-                  </>
-                )}
-              </div>
+              {(role === 'konsumator' || !role) && (
+                <div className="button-group">
+                  <button onClick={() => handleRequest(p)}>
+                    {t('Bëj kërkesë për blerje', 'Request to Buy')}
+                  </button>
+                  <button className="secondary" onClick={() => handleMessage(p)}>
+                    {t('Dërgo mesazh', 'Send Message')}
+                  </button>
+                </div>
+              )}
             </div>
           ))}
       </div>
@@ -120,4 +111,4 @@ function ConsumerPanel({ role, lang }) {
   );
 }
 
-export default ConsumerPanel;
+export default ProductList;
