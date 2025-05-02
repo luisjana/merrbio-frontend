@@ -1,8 +1,10 @@
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
+import { AppContext } from '../context/AppContext'; // Importo context-in
 
-export const FarmerOrders = ({ fermeri, lang }) => {
+export const FarmerOrders = ({ fermeri }) => {
   const [orders, setOrders] = useState([]);
+  const { lang } = useContext(AppContext); // Merr gjuhën nga context-i
 
   const t = (sq, en) => (lang === 'sq' ? sq : en);
 
@@ -37,12 +39,12 @@ export const FarmerOrders = ({ fermeri, lang }) => {
       {orders
         .filter(order => order.status === 'pending')
         .map(order => (
-          <div key={order.id} style={{ 
-            border: '1px solid #ccc', 
-            padding: '10px', 
-            margin: '10px auto', 
-            width: '300px', 
-            borderRadius: '8px' 
+          <div key={order.id} style={{
+            border: '1px solid #ccc',
+            padding: '10px',
+            margin: '10px auto',
+            width: '300px',
+            borderRadius: '8px'
           }}>
             <p><b>{t('Produkt ID', 'Product ID')}:</b> {order.productId}</p>
             <p><b>{t('Blerësi', 'Buyer')}:</b> {order.buyerName} - {order.buyerContact}</p>
