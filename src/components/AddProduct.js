@@ -1,36 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import axios from 'axios';
+import { AppContext } from '../context/AppContext'; // Importo contextin
 
 function AddProduct({ onProductAdded }) {
-  // State për të ruajtur fushat e formularit
   const [emri, setEmri] = useState('');
   const [pershkrimi, setPershkrimi] = useState('');
   const [cmimi, setCmimi] = useState('');
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState(0); // për progress bar
+  const [uploadProgress, setUploadProgress] = useState(0);
 
-  // Funksion për të ruajtur foton e zgjedhur
+  const { lang } = useContext(AppContext); // Merr gjuhën nga konteksti
+  const t = (sq, en) => (lang === 'sq' ? sq : en); // Funksion për përkthim
+
   const handleImageChange = (e) => setImage(e.target.files[0]);
 
-  // Funksion për të trajtuar submit-in e formularit
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Marr fermerin nga localStorage
     const fermeri = localStorage.getItem('username');
     if (!fermeri) {
-      alert('Ju lutem kyçuni për të shtuar produkt.');
+      alert(t('Ju lutem kyçuni për të shtuar produkt.', 'Please log in to add a product.'));
       return;
     }
 
-    // Validim që çmimi të jetë më i madh se zero
     if (cmimi <= 0) {
-      alert('Çmimi duhet të jetë më i madh se 0.');
+      alert(t('Çmimi duhet të jetë më i madh se 0.', 'Price must be greater than 0.'));
       return;
     }
 
-    // Përgatis formData për ta dërguar me multipart/form-data
     const formData = new FormData();
     formData.append('emri', emri);
     formData.append('pershkrimi', pershkrimi);
@@ -40,8 +37,6 @@ function AddProduct({ onProductAdded }) {
 
     try {
       setLoading(true);
-
-      // Bëj request dhe llogarit përqindjen e ngarkimit
       const response = await axios.post(
         'https://merrbio-backend.onrender.com/products',
         formData,
@@ -49,28 +44,25 @@ function AddProduct({ onProductAdded }) {
           headers: { 'Content-Type': 'multipart/form-data' },
           onUploadProgress: (progressEvent) => {
             const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-            setUploadProgress(percent); // Përditëson progress bar
+            setUploadProgress(percent);
           },
         }
       );
 
-      alert('✅ Produkti u shtua me sukses!');
-      
-      // Pastro fushat e formularit
+      alert(t('✅ Produkti u shtua me sukses!', '✅ Product added successfully!'));
       setEmri('');
       setPershkrimi('');
       setCmimi('');
       setImage(null);
       document.getElementById('imageInput').value = '';
 
-      // Rifresko listën e produkteve në parent component
       if (onProductAdded) onProductAdded();
     } catch (err) {
       console.error('❌ Gabim gjatë shtimit të produktit:', err.response?.data || err.message);
-      alert('❌ Gabim gjatë ngarkimit të produktit: ' + (err.response?.data?.message || 'Shiko konsolen.'));
+      alert('❌ ' + t('Gabim gjatë ngarkimit të produktit:', 'Error uploading product: ') + (err.response?.data?.message || 'Check console.'));
     } finally {
       setLoading(false);
-      setUploadProgress(0); // Reset progress bar pas ngarkimit
+      setUploadProgress(0);
     }
   };
 
@@ -79,20 +71,20 @@ function AddProduct({ onProductAdded }) {
       <input
         value={emri}
         onChange={(e) => setEmri(e.target.value)}
-        placeholder="Emri"
+        placeholder={t('Emri', 'Name')}
         required
       />
       <textarea
         value={pershkrimi}
         onChange={(e) => setPershkrimi(e.target.value)}
-        placeholder="Përshkrimi"
+        placeholder={t('Përshkrimi', 'Description')}
         required
       />
       <input
         value={cmimi}
         type="number"
         onChange={(e) => setCmimi(e.target.value)}
-        placeholder="Çmimi"
+        placeholder={t('Çmimi', 'Price')}
         required
       />
       <input
@@ -102,13 +94,12 @@ function AddProduct({ onProductAdded }) {
         id="imageInput"
       />
       <button type="submit" disabled={loading}>
-        {loading ? 'Duke u ngarkuar...' : 'Shto'}
+        {loading ? t('Duke u ngarkuar...', 'Uploading...') : t('Shto', 'Add')}
       </button>
 
-      {/* Progress bar gjatë ngarkimit */}
       {loading && (
         <div style={{ marginTop: '10px' }}>
-          Ngarkimi: {uploadProgress}%
+          {t('Ngarkimi', 'Uploading')}: {uploadProgress}%
         </div>
       )}
     </form>
