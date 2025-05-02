@@ -1,8 +1,10 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
-export const FarmerOrders = ({ fermeri }) => {
+export const FarmerOrders = ({ fermeri, lang }) => {
   const [orders, setOrders] = useState([]);
+
+  const t = (sq, en) => (lang === 'sq' ? sq : en);
 
   useEffect(() => {
     axios.get(`https://merrbio-backend.onrender.com/orders/${fermeri}`)
@@ -14,10 +16,10 @@ export const FarmerOrders = ({ fermeri }) => {
     try {
       await axios.put(`https://merrbio-backend.onrender.com/orders/${id}`, { status });
       setOrders(prev => prev.map(o => o.id === id ? { ...o, status } : o));
-      alert('Statusi u përditësua!');
+      alert(t('Statusi u përditësua!', 'Status updated!'));
     } catch (err) {
       console.error(err);
-      alert('Gabim gjatë përditësimit.');
+      alert(t('Gabim gjatë përditësimit.', 'Error updating status.'));
     }
   };
 
@@ -30,8 +32,8 @@ export const FarmerOrders = ({ fermeri }) => {
 
   return (
     <div style={{ textAlign: 'center' }}>
-      <h2>Kërkesat e mia për blerje</h2>
-      {orders.length === 0 && <p>Nuk ka kërkesa për momentin.</p>}
+      <h2>{t('Kërkesat e mia për blerje', 'My Purchase Requests')}</h2>
+      {orders.length === 0 && <p>{t('Nuk ka kërkesa për momentin.', 'No requests at the moment.')}</p>}
       {orders
         .filter(order => order.status === 'pending')
         .map(order => (
@@ -42,21 +44,27 @@ export const FarmerOrders = ({ fermeri }) => {
             width: '300px', 
             borderRadius: '8px' 
           }}>
-            <p><b>Produkt ID:</b> {order.productId}</p>
-            <p><b>Blerësi:</b> {order.buyerName} - {order.buyerContact}</p>
+            <p><b>{t('Produkt ID', 'Product ID')}:</b> {order.productId}</p>
+            <p><b>{t('Blerësi', 'Buyer')}:</b> {order.buyerName} - {order.buyerContact}</p>
             <p>
-              <b>Status:</b>{' '}
+              <b>{t('Status', 'Status')}:</b>{' '}
               <span style={{ color: getStatusColor(order.status), fontWeight: 'bold' }}>
                 {order.status}
               </span>
             </p>
             {order.status === 'pending' && (
               <div style={{ marginTop: '10px' }}>
-                <button onClick={() => updateStatus(order.id, 'confirmed')} style={{ marginRight: '10px', backgroundColor: 'green', color: 'white' }}>
-                  Prano
+                <button
+                  onClick={() => updateStatus(order.id, 'confirmed')}
+                  style={{ marginRight: '10px', backgroundColor: 'green', color: 'white' }}
+                >
+                  {t('Prano', 'Accept')}
                 </button>
-                <button onClick={() => updateStatus(order.id, 'rejected')} style={{ backgroundColor: 'red', color: 'white' }}>
-                  Refuzo
+                <button
+                  onClick={() => updateStatus(order.id, 'rejected')}
+                  style={{ backgroundColor: 'red', color: 'white' }}
+                >
+                  {t('Refuzo', 'Reject')}
                 </button>
               </div>
             )}

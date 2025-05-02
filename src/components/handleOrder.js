@@ -1,10 +1,13 @@
 import axios from 'axios';
 
-export const handleOrder = async (productId) => {
-  const name = prompt('Shkruaj emrin tënd:');
-  const contact = prompt('Shkruaj numrin e kontaktit:');
+export const handleOrder = async (productId, lang) => {
+  const t = (sq, en) => (lang === 'sq' ? sq : en);
+
+  const name = prompt(t('Shkruaj emrin tënd:', 'Enter your name:'));
+  const contact = prompt(t('Shkruaj numrin e kontaktit:', 'Enter your contact number:'));
+  
   if (!name || !contact) {
-    alert('Emri dhe kontakti janë të detyrueshëm.');
+    alert(t('Emri dhe kontakti janë të detyrueshëm.', 'Name and contact are required.'));
     return;
   }
 
@@ -14,9 +17,9 @@ export const handleOrder = async (productId) => {
       buyerName: name,
       buyerContact: contact,
     });
-    alert('Kërkesa u dërgua me sukses!');
+    alert(t('Kërkesa u dërgua me sukses!', 'Request sent successfully!'));
   } catch (err) {
     console.error(err);
-    alert('Gabim gjatë dërgimit të kërkesës.');
+    alert(t('Gabim gjatë dërgimit të kërkesës.', 'Error sending request.'));
   }
 };
