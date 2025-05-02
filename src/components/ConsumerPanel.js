@@ -18,16 +18,27 @@ function ConsumerPanel({ role }) {
       .catch(err => console.error('Gabim në ngarkimin e produkteve:', err));
   }, []);
 
-  const handleRequest = (product) => {
-    const konsumatori = prompt(t('Shkruaj emrin tënd dhe nr kontakti:', 'Enter your name and number:'));
-    axios
-      .post('https://merrbio-backend.onrender.com/requests', {
-        produkti: product.emri,
-        fermeri: product.fermeri,
-        konsumatori: konsumatori || 'anonim',
-      })
-      .then(res => alert(res.data.message));
+  const handleRequest = async (product) => {
+    const emri = prompt('Shkruaj emrin tënd:');
+    const telefoni = prompt('Shkruaj numrin e kontaktit:');
+    if (!emri || !telefoni) {
+      alert('Emri dhe numri janë të detyrueshëm!');
+      return;
+    }
+  
+    try {
+      await axios.post('https://merrbio-backend.onrender.com/orders', {
+        productId: product.id,
+        buyerName: emri,
+        buyerContact: telefoni,
+      });
+      alert('Kërkesa u dërgua me sukses!');
+    } catch (err) {
+      console.error(err);
+      alert('Gabim gjatë dërgimit të kërkesës.');
+    }
   };
+  
 
   // ✅ Butoni për mesazh është hequr — nuk përdoret më:
   // const handleMessage = (product) => {
