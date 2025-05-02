@@ -18,14 +18,13 @@ function ProductList() {
           <p>{p.pershkrimi}</p>
           <p>{p.cmimi} lek</p>
           {p.image && (
-            <img
-              src={p.image.startsWith('http') 
-                ? p.image 
-                : `https://merrbio-backend.onrender.com${p.image}`}
-              alt={p.emri}
-              style={{ width: '150px' }}
-            />
-          )}
+  <img
+    src={p.image}
+    alt={p.emri}
+    style={{ width: '150px' }}
+  />
+)}
+
         </div>
       ))}
     </div>
