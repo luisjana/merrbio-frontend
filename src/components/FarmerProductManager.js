@@ -107,13 +107,18 @@ function FarmerProductManager({ lang, refresh, setRefresh = () => {} }) {
                   type="file"
                   onChange={handleImageChange}
                 />
-                {editedProduct.preview && (
-                  <img
-                    src={editedProduct.preview}
-                    alt="Preview"
-                    style={{ width: '100px', marginTop: '10px', borderRadius: '8px' }}
-                  />
-                )}
+<img
+  src={editedProduct.preview}
+  alt="Preview"
+  style={{
+    width: '100%',
+    height: '160px',
+    objectFit: 'cover',
+    borderRadius: '8px',
+    marginTop: '10px',
+  }}
+/>
+
                 <div style={{ marginTop: '10px' }}>
                   <button onClick={handleSave}>{t('Ruaj Ndryshimet', 'Save Changes')}</button>
                   <button onClick={() => setEditingId(null)} style={{ marginLeft: '10px' }}>
