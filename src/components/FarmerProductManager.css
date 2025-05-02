@@ -86,3 +86,44 @@ body.dark .product-card {
 body.dark .product-card {
   box-shadow: 0 2px 10px rgba(255, 255, 255, 0.05);
 }
+body.dark .farmer-product-section {
+  --card-bg: #2c2c2c;
+  --text-color: #f0f0f0;
+}
+
+body.dark .product-card {
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+body.dark .product-card button:first-of-type {
+  background-color: #66bb6a;
+  color: #fff;
+}
+
+body.dark .product-card button:nth-of-type(2) {
+  background-color: #ef5350;
+  color: #fff;
+}
+
+body.dark input,
+body.dark textarea {
+  background-color: #3a3a3a;
+  color: #f0f0f0;
+  border: 1px solid #555;
+}
+
+body.dark input::placeholder,
+body.dark textarea::placeholder {
+  color: #bbb;
+}
+
+body.dark input[type="file"] {
+  background-color: transparent;
+  color: #f0f0f0;
+}
+
+body.dark .product-card img {
+  border: 2px solid #555;
+}
