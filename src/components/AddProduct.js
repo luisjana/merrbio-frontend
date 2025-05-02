@@ -28,9 +28,8 @@ function AddProduct({ onProductAdded }) {
 
     try {
       setLoading(true);
-      await axios.post('https://merrbio-backend.onrender.com/products', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
+      await axios.post('https://merrbio-backend.onrender.com/products', formData);
+
 
       alert('Produkti u shtua me sukses!');
       setEmri('');
