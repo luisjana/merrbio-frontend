@@ -28,11 +28,16 @@ function AddProduct({ onProductAdded }) {
 
     try {
       setLoading(true);
-      await axios.post('https://merrbio-backend.onrender.com/products', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
-      
-      alert('Produkti u shtua me sukses!');
+
+      const response = await axios.post(
+        'https://merrbio-backend.onrender.com/products',
+        formData,
+        {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        }
+      );
+
+      alert('✅ Produkti u shtua me sukses!');
       setEmri('');
       setPershkrimi('');
       setCmimi('');
@@ -41,8 +46,8 @@ function AddProduct({ onProductAdded }) {
 
       if (onProductAdded) onProductAdded();
     } catch (err) {
-      console.error('Gabim gjatë shtimit të produktit:', err);
-      alert('Gabim gjatë ngarkimit të produktit.');
+      console.error('❌ Gabim gjatë shtimit të produktit:', err.response?.data || err.message);
+      alert('❌ Gabim gjatë ngarkimit të produktit: ' + (err.response?.data?.message || 'Shiko konsolen.'));
     } finally {
       setLoading(false);
     }
@@ -74,7 +79,6 @@ function AddProduct({ onProductAdded }) {
         accept="image/*"
         onChange={handleImageChange}
         id="imageInput"
-        required
       />
       <button type="submit" disabled={loading}>
         {loading ? 'Duke u ngarkuar...' : 'Shto'}
