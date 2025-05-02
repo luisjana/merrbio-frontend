@@ -6,13 +6,15 @@ import './FarmerDashboard.css';
 
 function FarmerDashboard({ lang }) {
   const [refresh, setRefresh] = useState(false);
-  const username = localStorage.getItem('username'); // Merr username-in e fermerit
+  const username = localStorage.getItem('username');
 
   const handleRefresh = () => setRefresh(prev => !prev);
 
+  const t = (sq, en) => (lang === 'sq' ? sq : en);
+
   return (
     <div className="farmer-dashboard">
-      <h2 style={{ textAlign: 'center' }}>Paneli i Fermerit</h2>
+      <h2 style={{ textAlign: 'center' }}>{t('Paneli i Fermerit', 'Farmer Panel')}</h2>
 
       {/* Shto produkt */}
       <AddProduct lang={lang} onProductAdded={handleRefresh} />
