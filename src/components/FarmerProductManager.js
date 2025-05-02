@@ -5,7 +5,13 @@ import './FarmerProductManager.css';
 function FarmerProductManager({ lang, refresh, setRefresh = () => {} }) {
   const [products, setProducts] = useState([]);
   const [editingId, setEditingId] = useState(null);
-  const [editedProduct, setEditedProduct] = useState({ emri: '', pershkrimi: '', cmimi: '', image: null, preview: null });
+  const [editedProduct, setEditedProduct] = useState({
+    emri: '',
+    pershkrimi: '',
+    cmimi: '',
+    image: null,
+    preview: null
+  });
 
   const username = localStorage.getItem('username');
   const t = (sq, en) => (lang === 'sq' ? sq : en);
@@ -22,7 +28,7 @@ function FarmerProductManager({ lang, refresh, setRefresh = () => {} }) {
 
   const handleEditClick = (product) => {
     setEditingId(product.id);
-    setEditedProduct({ ...product, image: null, preview: null });
+    setEditedProduct({ ...product, image: null, preview: product.image });
   };
 
   const handleInputChange = (e) => {
@@ -45,13 +51,13 @@ function FarmerProductManager({ lang, refresh, setRefresh = () => {} }) {
       formData.append('emri', editedProduct.emri);
       formData.append('pershkrimi', editedProduct.pershkrimi);
       formData.append('cmimi', editedProduct.cmimi);
-      formData.append('fermeri', username); // ✅ u shtua
+      formData.append('fermeri', username);
       if (editedProduct.image) formData.append('image', editedProduct.image);
-  
+
       await axios.put(`https://merrbio-backend.onrender.com/products/${editingId}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
-  
+
       alert(t('Produkti u përditësua!', 'Product updated!'));
       setEditingId(null);
       setRefresh(prev => !prev);
@@ -60,7 +66,6 @@ function FarmerProductManager({ lang, refresh, setRefresh = () => {} }) {
       alert(t('Gabim gjatë përditësimit!', 'Error updating product!'));
     }
   };
-  
 
   const handleDelete = async (id) => {
     if (window.confirm(t('A jeni të sigurt që dëshironi ta fshini këtë produkt?', 'Are you sure you want to delete this product?'))) {
@@ -107,19 +112,14 @@ function FarmerProductManager({ lang, refresh, setRefresh = () => {} }) {
                   type="file"
                   onChange={handleImageChange}
                 />
-<img
-  src={editedProduct.preview}
-  alt="Preview"
-  style={{
-    width: '100%',
-    height: '160px',
-    objectFit: 'cover',
-    borderRadius: '8px',
-    marginTop: '10px',
-  }}
-/>
-
-                <div style={{ marginTop: '10px' }}>
+                {editedProduct.preview && (
+                  <img
+                    src={editedProduct.preview}
+                    alt="Preview"
+                    className="product-image"
+                  />
+                )}
+                <div>
                   <button onClick={handleSave}>{t('Ruaj Ndryshimet', 'Save Changes')}</button>
                   <button onClick={() => setEditingId(null)} style={{ marginLeft: '10px' }}>
                     {t('Anulo', 'Cancel')}
@@ -132,15 +132,13 @@ function FarmerProductManager({ lang, refresh, setRefresh = () => {} }) {
                 <p>{p.pershkrimi}</p>
                 <p>{p.cmimi} lek</p>
                 {p.image && (
-  <img
-    src={p.image}
-    alt="foto"
-    style={{ width: '100px', marginTop: '10px', borderRadius: '8px' }}
-  />
-)}
-
-
-                <div style={{ marginTop: '10px' }}>
+                  <img
+                    src={p.image}
+                    alt="foto"
+                    className="product-image"
+                  />
+                )}
+                <div>
                   <button onClick={() => handleEditClick(p)}>{t('Ndrysho', 'Edit')}</button>
                   <button onClick={() => handleDelete(p.id)} style={{ marginLeft: '10px' }}>
                     {t('Fshi', 'Delete')}
