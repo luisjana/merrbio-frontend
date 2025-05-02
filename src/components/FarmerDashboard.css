@@ -99,4 +99,50 @@
   .order-card p {
     margin: 0.3rem 0;
   }
-  
+  /* Dark mode për dashboard */
+body.dark .farmer-dashboard {
+  background-color: #121212;
+  color: #f0f0f0;
+}
+
+body.dark .farmer-dashboard h2 {
+  color: #f0f0f0;
+}
+
+body.dark .product-card {
+  background-color: #1f1f1f;
+  color: #f0f0f0;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+}
+
+body.dark .product-card img {
+  border: 2px solid #333;
+}
+
+body.dark .product-card button:first-of-type {
+  background-color: #66bb6a;
+}
+
+body.dark .product-card button:nth-of-type(2) {
+  background-color: #ef5350;
+}
+
+/* Dark mode për input-et (nëse ke form brenda AddProduct ose edit) */
+body.dark input,
+body.dark textarea {
+  background-color: #2a2a2a;
+  color: #f0f0f0;
+  border: 1px solid #444;
+}
+
+body.dark input::placeholder,
+body.dark textarea::placeholder {
+  color: #bbb;
+}
+
+/* Dark mode për order cards */
+body.dark .order-card {
+  background-color: #1e1e1e;
+  color: #f0f0f0;
+  box-shadow: 0 2px 10px rgba(255, 255, 255, 0.06);
+}
