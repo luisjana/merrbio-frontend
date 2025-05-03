@@ -1,43 +1,27 @@
 import axios from 'axios';
 import { useEffect, useState, useContext } from 'react';
-import { AppContext } from '../context/AppContext';
+import { AppContext } from '../context/AppContext'; // Importo context-in
 
 export const FarmerOrders = ({ fermeri }) => {
   const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const { lang } = useContext(AppContext);
+  const { lang } = useContext(AppContext); // Merr gjuhën nga context-i
 
   const t = (sq, en) => (lang === 'sq' ? sq : en);
 
   useEffect(() => {
-    const fetchOrders = async () => {
-      setLoading(true);
-      try {
-        const res = await axios.get(`https://merrbio-backend.onrender.com/orders/${fermeri}`);
-        setOrders(res.data);
-      } catch (err) {
-        console.error(err);
-        alert(t('Gabim gjatë marrjes së kërkesave!', 'Error fetching requests!'));
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchOrders();
+    axios.get(`https://merrbio-backend.onrender.com/orders/${fermeri}`)
+      .then(res => setOrders(res.data))
+      .catch(err => console.error(err));
   }, [fermeri]);
 
   const updateStatus = async (id, status) => {
     try {
       await axios.put(`https://merrbio-backend.onrender.com/orders/${id}`, { status });
       setOrders(prev => prev.map(o => o.id === id ? { ...o, status } : o));
-      alert(
-        status === 'confirmed'
-          ? t('✅ Kërkesa u pranua!', '✅ Request accepted!')
-          : t('❌ Kërkesa u refuzua!', '❌ Request rejected!')
-      );
+      alert(t('Statusi u përditësua!', 'Status updated!'));
     } catch (err) {
       console.error(err);
-      alert(t('Gabim gjatë përditësimit të statusit!', 'Error updating status!'));
+      alert(t('Gabim gjatë përditësimit.', 'Error updating status.'));
     }
   };
 
@@ -50,30 +34,24 @@ export const FarmerOrders = ({ fermeri }) => {
 
   return (
     <div style={{ textAlign: 'center' }}>
-      <h2>{t('📥 Kërkesat e mia për blerje', '📥 My Purchase Requests')}</h2>
-
-      {loading ? (
-        <p>{t('Duke u ngarkuar...', 'Loading...')}</p>
-      ) : orders.length === 0 ? (
-        <p>{t('Nuk ka kërkesa për momentin.', 'No requests at the moment.')}</p>
-      ) : (
-        orders.map(order => (
-          <div
-            key={order.id}
-            style={{
-              border: '1px solid #ccc',
-              padding: '10px',
-              margin: '10px auto',
-              width: '300px',
-              borderRadius: '8px'
-            }}
-          >
+      <h2>{t('Kërkesat e mia për blerje', 'My Purchase Requests')}</h2>
+      {orders.length === 0 && <p>{t('Nuk ka kërkesa për momentin.', 'No requests at the moment.')}</p>}
+      {orders
+        .filter(order => order.status === 'pending')
+        .map(order => (
+          <div key={order.id} style={{
+            border: '1px solid #ccc',
+            padding: '10px',
+            margin: '10px auto',
+            width: '300px',
+            borderRadius: '8px'
+          }}>
             <p><b>{t('Produkt ID', 'Product ID')}:</b> {order.productId}</p>
             <p><b>{t('Blerësi', 'Buyer')}:</b> {order.buyerName} - {order.buyerContact}</p>
             <p>
-              <b>{t('Statusi', 'Status')}:</b>{' '}
+              <b>{t('Status', 'Status')}:</b>{' '}
               <span style={{ color: getStatusColor(order.status), fontWeight: 'bold' }}>
-                {t(order.status, order.status)}
+                {order.status}
               </span>
             </p>
             {order.status === 'pending' && (
@@ -82,19 +60,18 @@ export const FarmerOrders = ({ fermeri }) => {
                   onClick={() => updateStatus(order.id, 'confirmed')}
                   style={{ marginRight: '10px', backgroundColor: 'green', color: 'white' }}
                 >
-                  {t('✅ Prano', '✅ Accept')}
+                  {t('Prano', 'Accept')}
                 </button>
                 <button
                   onClick={() => updateStatus(order.id, 'rejected')}
                   style={{ backgroundColor: 'red', color: 'white' }}
                 >
-                  {t('❌ Refuzo', '❌ Reject')}
+                  {t('Refuzo', 'Reject')}
                 </button>
               </div>
             )}
           </div>
-        ))
-      )}
+        ))}
     </div>
   );
 };

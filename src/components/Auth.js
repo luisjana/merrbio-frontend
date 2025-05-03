@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { AppContext } from '../context/AppContext';
-import api from '../api'; // përdor api.js në vend të axios direkt
 import './auth.css';
 
 function Auth({ onLogin }) {
@@ -41,10 +41,11 @@ function Auth({ onLogin }) {
     const endpoint = isRegister ? 'register' : 'login';
 
     try {
-      const res = await api.post(`/${endpoint}`, cleanedData);
+      const res = await axios.post(`https://merrbio-backend.onrender.com/${endpoint}`, cleanedData);
 
       alert(res.data.message);
 
+      // ✅ Ruaj token, role dhe username në localStorage
       if (res.data.token) {
         localStorage.setItem('token', res.data.token);
       }

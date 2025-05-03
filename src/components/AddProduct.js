@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
-import api from '../api'; // përdor api.js që shton token automatikisht
-import { AppContext } from '../context/AppContext';
+import axios from 'axios';
+import { AppContext } from '../context/AppContext'; // Importo contextin
 
 function AddProduct({ onProductAdded }) {
   const [emri, setEmri] = useState('');
@@ -10,8 +10,8 @@ function AddProduct({ onProductAdded }) {
   const [loading, setLoading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
 
-  const { lang } = useContext(AppContext);
-  const t = (sq, en) => (lang === 'sq' ? sq : en);
+  const { lang } = useContext(AppContext); // Merr gjuhën nga konteksti
+  const t = (sq, en) => (lang === 'sq' ? sq : en); // Funksion për përkthim
 
   const handleImageChange = (e) => setImage(e.target.files[0]);
 
@@ -37,13 +37,17 @@ function AddProduct({ onProductAdded }) {
 
     try {
       setLoading(true);
-      const response = await api.post('/products', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-        onUploadProgress: (progressEvent) => {
-          const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-          setUploadProgress(percent);
-        },
-      });
+      const response = await axios.post(
+        'https://merrbio-backend.onrender.com/products',
+        formData,
+        {
+          headers: { 'Content-Type': 'multipart/form-data' },
+          onUploadProgress: (progressEvent) => {
+            const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+            setUploadProgress(percent);
+          },
+        }
+      );
 
       alert(t('✅ Produkti u shtua me sukses!', '✅ Product added successfully!'));
       setEmri('');

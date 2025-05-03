@@ -18,20 +18,20 @@ function FarmerDashboard({ lang }) {
         {t('👨‍🌾 Paneli i Fermerit', '👨‍🌾 Farmer Panel')}
       </h2>
 
-      {/* ✅ Seksioni për shtimin e produkteve */}
-      <section className="dashboard-section">
+      {/* ✅ Shto produktin e ri */}
+      <section>
         <h3>{t('Shto Produkt', 'Add Product')}</h3>
         <AddProduct lang={lang} onProductAdded={handleRefresh} />
       </section>
 
-      {/* ✅ Seksioni për menaxhimin e produkteve */}
-      <section className="dashboard-section">
+      {/* ✅ Menaxho produktet e mia */}
+      <section style={{ marginTop: '30px' }}>
         <h3>{t('Produktet e Mia', 'My Products')}</h3>
         <FarmerProductManager lang={lang} refresh={refresh} />
       </section>
 
-      {/* ✅ Seksioni për kërkesat e blerjes */}
-      <section className="dashboard-section">
+      {/* ✅ Shfaq kërkesat e blerjes nga konsumatorët */}
+      <section style={{ marginTop: '30px' }}>
         <h3>{t('Kërkesat për Blerje', 'Purchase Requests')}</h3>
         <FarmerOrders fermeri={username} />
       </section>

@@ -1,62 +1,49 @@
 import React, { useState, useEffect, useContext } from 'react';
-import api from '../api'; // përdor api.js që shton token-in
-import { AppContext } from '../context/AppContext';
+import axios from 'axios';
+import { AppContext } from '../context/AppContext'; // Import AppContext
 
 function AdminPanel() {
   const [users, setUsers] = useState([]);
   const [newUser, setNewUser] = useState({ username: '', password: '', role: 'konsumator' });
   const [loading, setLoading] = useState(false);
 
-  const { lang } = useContext(AppContext);
+  const { lang } = useContext(AppContext); // vetem lang — jo setLang sepse nuk na duhet këtu
   const currentUser = localStorage.getItem('username');
-  const t = (sq, en) => (lang === 'sq' ? sq : en);
 
   useEffect(() => {
-    fetchUsers();
+    axios.get('https://merrbio-backend.onrender.com/users')
+      .then(res => setUsers(res.data.filter(user => user.username !== currentUser)))
+      .catch(err => console.error('Gabim në marrjen e përdoruesve:', err));
   }, [currentUser]);
 
-  const fetchUsers = async () => {
-    try {
-      const res = await api.get('/users');
-      setUsers(res.data.filter(user => user.username !== currentUser));
-    } catch (err) {
-      console.error('Gabim në marrjen e përdoruesve:', err);
-    }
-  };
-
   const handleAddUser = async () => {
-    if (newUser.username.trim().length < 3 || newUser.password.trim().length < 6) {
-      alert(t('Emri ≥3 shkronja dhe fjalëkalimi ≥6!', 'Username ≥3 characters and password ≥6!'));
-      return;
-    }
-
     setLoading(true);
     try {
-      const res = await api.post('/users', newUser);
+      const res = await axios.post('https://merrbio-backend.onrender.com/users', newUser);
       alert(res.data.message);
       setNewUser({ username: '', password: '', role: 'konsumator' });
-      fetchUsers();
+      const usersResponse = await axios.get('https://merrbio-backend.onrender.com/users');
+      setUsers(usersResponse.data.filter(user => user.username !== currentUser));
     } catch (err) {
       console.error(err);
-      alert(t('Gabim në shtimin e përdoruesit!', 'Error adding user!'));
+      alert(lang === 'sq' ? 'Gabim në shtimin e përdoruesit!' : 'Error adding user!');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleDeleteUser = async (username) => {
-    if (!window.confirm(t(`A jeni të sigurt që dëshironi të fshini përdoruesin "${username}"?`,
-                          `Are you sure you want to delete the user "${username}"?`))) return;
-
-    try {
-      const res = await api.delete(`/users/${username}`);
-      alert(res.data.message);
-      setUsers(users.filter(u => u.username !== username));
-    } catch (err) {
-      console.error(err);
-      alert(t('Gabim në fshirjen e përdoruesit!', 'Error deleting user!'));
+  const handleDeleteUser = (username) => {
+    if (window.confirm(lang === 'sq' ? `A jeni të sigurt që dëshironi të fshini përdoruesin "${username}"?` : `Are you sure you want to delete the user "${username}"?`)) {
+      axios.delete(`https://merrbio-backend.onrender.com/users/${username}`)
+        .then(res => {
+          alert(res.data.message);
+          setUsers(users.filter(u => u.username !== username));
+        })
+        .catch(err => console.error('Gabim në fshirjen e përdoruesit:', err));
     }
   };
+
+  const t = (sq, en) => (lang === 'sq' ? sq : en);
 
   return (
     <div className="admin-panel">
@@ -67,9 +54,7 @@ function AdminPanel() {
           {users.map(user => (
             <li key={user.username}>
               <span>{user.username} — {user.role}</span>
-              <button onClick={() => handleDeleteUser(user.username)}>
-                {t('Fshi', 'Delete')}
-              </button>
+              <button onClick={() => handleDeleteUser(user.username)}>{t('Fshi', 'Delete')}</button>
             </li>
           ))}
         </ul>
@@ -83,14 +68,12 @@ function AdminPanel() {
             placeholder={t('Emri', 'Username')}
             value={newUser.username}
             onChange={(e) => setNewUser({ ...newUser, username: e.target.value })}
-            required
           />
           <input
             type="password"
             placeholder={t('Fjalëkalimi', 'Password')}
             value={newUser.password}
             onChange={(e) => setNewUser({ ...newUser, password: e.target.value })}
-            required
           />
           <select
             value={newUser.role}
