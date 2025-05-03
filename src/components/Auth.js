@@ -12,7 +12,7 @@ function Auth({ onLogin }) {
     role: 'konsumator',
   });
 
-  const [error, setError] = useState('');
+  const [error, setError] = useState(''); // 🆕 për mesazh gabimi
 
   const { lang } = useContext(AppContext);
   const navigate = useNavigate();
@@ -21,7 +21,7 @@ function Auth({ onLogin }) {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    setError('');
+    setError(''); // fshij gabimin nëse përdoruesi po shtyp
   };
 
   const handleSubmit = async (e) => {
@@ -42,22 +42,15 @@ function Auth({ onLogin }) {
 
     try {
       const res = await axios.post(`https://merrbio-backend.onrender.com/${endpoint}`, cleanedData);
-
       alert(res.data.message);
-
-      // ✅ Ruaj token, role dhe username në localStorage
-      if (res.data.token) {
-        localStorage.setItem('token', res.data.token);
-      }
-      localStorage.setItem('role', cleanedData.role);
-      localStorage.setItem('username', cleanedData.username);
-
-      onLogin(cleanedData.role, cleanedData.username);
+      localStorage.setItem('role', res.data.role);
+      localStorage.setItem('username', res.data.username);
+      onLogin(res.data.role, res.data.username);
       navigate('/');
     } catch (err) {
       console.error('Gabim në kërkesën e API-së:', err.response?.data || err.message);
       if (err.response && err.response.status === 401) {
-        setError(t('Roli ose kredencialet nuk përputhen!', 'Role or credentials do not match!'));
+        setError(t('Roli nuk përputhet me kredencialet!', 'Role does not match credentials!'));
       } else {
         setError(t('Gabim gjatë hyrjes ose regjistrimit!', 'Login or registration error!'));
       }
@@ -125,6 +118,7 @@ function Auth({ onLogin }) {
               )}
             </div>
 
+            {/* 🔴 Mesazhi i gabimit */}
             {error && (
               <p style={{ color: 'red', marginTop: '10px', fontWeight: 'bold' }}>
                 {error}
