@@ -18,11 +18,15 @@ function App() {
   const { lang, setLang, dark, setDark } = useContext(AppContext);
 
   useEffect(() => {
-    const savedRole = localStorage.getItem('role');
-    const savedUsername = localStorage.getItem('username');
-    if (savedRole && savedUsername) {
-      setRole(savedRole);
-      setUsername(savedUsername);
+    try {
+      const savedRole = localStorage.getItem('role');
+      const savedUsername = localStorage.getItem('username');
+      if (savedRole && savedUsername) {
+        setRole(savedRole);
+        setUsername(savedUsername);
+      }
+    } catch (error) {
+      console.error('❌ Error loading user from localStorage:', error);
     }
   }, []);
 
@@ -51,20 +55,29 @@ function App() {
                 : `👋 ${t('Përshëndetje!', 'Hello!')}`}
             </span>
 
-            {username && <button onClick={handleLogout}>Dil</button>}
+            {username && (
+              <button onClick={handleLogout} className="rounded-btn">
+                {t('Dil', 'Logout')}
+              </button>
+            )}
 
-            <button className="rounded-btn" onClick={() => setLang(lang === 'sq' ? 'en' : 'sq')}>
-              <span style={{ fontWeight: 'bold' }}>{lang === 'sq' ? '🇦🇱 Shqip' : 'En English'}</span>
+            <button
+              className="rounded-btn"
+              onClick={() => setLang(prev => (prev === 'sq' ? 'en' : 'sq'))}
+            >
+              <span style={{ fontWeight: 'bold' }}>
+                {lang === 'sq' ? '🇦🇱 Shqip' : 'En English'}
+              </span>
             </button>
 
-            <button className="rounded-btn" onClick={() => setDark(!dark)}>
+            <button className="rounded-btn" onClick={() => setDark(prev => !prev)}>
               {dark ? (
                 <>
-                  ☀️ <span style={{ fontWeight: 'bold' }}>{t('Drita', 'Light Mode')}</span>
+                  ☀️ <span style={{ fontWeight: 'bold' }}>{t('Drita', 'Light')}</span>
                 </>
               ) : (
                 <>
-                  🌙 <span style={{ fontWeight: 'bold' }}>{t('Errësira', 'Dark Mode')}</span>
+                  🌙 <span style={{ fontWeight: 'bold' }}>{t('Errësira', 'Dark')}</span>
                 </>
               )}
             </button>
@@ -76,13 +89,24 @@ function App() {
             {!role ? (
               <Route
                 path="*"
-                element={<Auth onLogin={(r, u) => { setRole(r); setUsername(u); }} />}
+                element={
+                  <Auth
+                    onLogin={(r, u) => {
+                      setRole(r);
+                      setUsername(u);
+                    }}
+                  />
+                }
               />
             ) : (
               <>
-                {role === 'fermer' && <Route path="/" element={<FarmerDashboard lang={lang} />} />}
+                {role === 'fermer' && (
+                  <Route path="/" element={<FarmerDashboard lang={lang} />} />
+                )}
                 {role === 'admin' && <Route path="/" element={<AdminPanel />} />}
-                {role === 'konsumator' && <Route path="/" element={<ConsumerPanel role={role} />} />}
+                {role === 'konsumator' && (
+                  <Route path="/" element={<ConsumerPanel role={role} />} />
+                )}
                 <Route path="*" element={<Navigate to="/" />} />
               </>
             )}

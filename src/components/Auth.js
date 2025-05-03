@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { AppContext } from '../context/AppContext';
+import api from '../api'; // përdor api.js në vend të axios direkt
 import './auth.css';
 
 function Auth({ onLogin }) {
@@ -12,7 +12,7 @@ function Auth({ onLogin }) {
     role: 'konsumator',
   });
 
-  const [error, setError] = useState(''); // 🆕 për mesazh gabimi
+  const [error, setError] = useState('');
 
   const { lang } = useContext(AppContext);
   const navigate = useNavigate();
@@ -21,7 +21,7 @@ function Auth({ onLogin }) {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    setError(''); // fshij gabimin nëse përdoruesi po shtyp
+    setError('');
   };
 
   const handleSubmit = async (e) => {
@@ -41,16 +41,22 @@ function Auth({ onLogin }) {
     const endpoint = isRegister ? 'register' : 'login';
 
     try {
-      const res = await axios.post(`https://merrbio-backend.onrender.com/${endpoint}`, cleanedData);
+      const res = await api.post(`/${endpoint}`, cleanedData);
+
       alert(res.data.message);
-      localStorage.setItem('role', res.data.role);
-      localStorage.setItem('username', res.data.username);
-      onLogin(res.data.role, res.data.username);
+
+      if (res.data.token) {
+        localStorage.setItem('token', res.data.token);
+      }
+      localStorage.setItem('role', cleanedData.role);
+      localStorage.setItem('username', cleanedData.username);
+
+      onLogin(cleanedData.role, cleanedData.username);
       navigate('/');
     } catch (err) {
       console.error('Gabim në kërkesën e API-së:', err.response?.data || err.message);
       if (err.response && err.response.status === 401) {
-        setError(t('Roli nuk përputhet me kredencialet!', 'Role does not match credentials!'));
+        setError(t('Roli ose kredencialet nuk përputhen!', 'Role or credentials do not match!'));
       } else {
         setError(t('Gabim gjatë hyrjes ose regjistrimit!', 'Login or registration error!'));
       }
@@ -118,7 +124,6 @@ function Auth({ onLogin }) {
               )}
             </div>
 
-            {/* 🔴 Mesazhi i gabimit */}
             {error && (
               <p style={{ color: 'red', marginTop: '10px', fontWeight: 'bold' }}>
                 {error}

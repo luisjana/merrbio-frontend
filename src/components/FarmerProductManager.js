@@ -17,13 +17,17 @@ function FarmerProductManager({ lang, refresh, setRefresh = () => {} }) {
   const t = (sq, en) => (lang === 'sq' ? sq : en);
 
   useEffect(() => {
-    axios.get('https://merrbio-backend.onrender.com/products')
-      .then(res => {
-        const allProducts = res.data;
-        const myProducts = allProducts.filter(p => p.fermeri === username);
+    const fetchProducts = async () => {
+      try {
+        const res = await axios.get('https://merrbio-backend.onrender.com/products');
+        const myProducts = res.data.filter(p => p.fermeri === username);
         setProducts(myProducts);
-      })
-      .catch(err => console.error('Gabim gjatë marrjes së produkteve:', err));
+      } catch (err) {
+        console.error('Gabim gjatë marrjes së produkteve:', err);
+        alert(t('Gabim gjatë marrjes së produkteve!', 'Error fetching products!'));
+      }
+    };
+    fetchProducts();
   }, [username, refresh]);
 
   const handleEditClick = (product) => {
@@ -38,14 +42,21 @@ function FarmerProductManager({ lang, refresh, setRefresh = () => {} }) {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    setEditedProduct(prev => ({
-      ...prev,
-      image: file,
-      preview: URL.createObjectURL(file)
-    }));
+    if (file) {
+      setEditedProduct(prev => ({
+        ...prev,
+        image: file,
+        preview: URL.createObjectURL(file)
+      }));
+    }
   };
 
   const handleSave = async () => {
+    if (!editedProduct.emri || !editedProduct.pershkrimi || !editedProduct.cmimi) {
+      alert(t('Ju lutem plotësoni të gjitha fushat!', 'Please fill all fields!'));
+      return;
+    }
+
     try {
       const formData = new FormData();
       formData.append('emri', editedProduct.emri);
@@ -58,12 +69,12 @@ function FarmerProductManager({ lang, refresh, setRefresh = () => {} }) {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
 
-      alert(t('Produkti u përditësua!', 'Product updated!'));
+      alert(t('✅ Produkti u përditësua!', '✅ Product updated!'));
       setEditingId(null);
       setRefresh(prev => !prev);
     } catch (err) {
       console.error('Gabim gjatë përditësimit:', err);
-      alert(t('Gabim gjatë përditësimit!', 'Error updating product!'));
+      alert(t('❌ Gabim gjatë përditësimit!', '❌ Error updating product!'));
     }
   };
 
@@ -71,18 +82,18 @@ function FarmerProductManager({ lang, refresh, setRefresh = () => {} }) {
     if (window.confirm(t('A jeni të sigurt që dëshironi ta fshini këtë produkt?', 'Are you sure you want to delete this product?'))) {
       try {
         await axios.delete(`https://merrbio-backend.onrender.com/products/${id}`);
-        alert(t('Produkti u fshi me sukses!', 'Product deleted successfully!'));
+        alert(t('✅ Produkti u fshi me sukses!', '✅ Product deleted successfully!'));
         setProducts(products.filter(p => p.id !== id));
       } catch (err) {
         console.error('Gabim gjatë fshirjes:', err);
-        alert(t('Gabim gjatë fshirjes së produktit!', 'Error deleting product!'));
+        alert(t('❌ Gabim gjatë fshirjes së produktit!', '❌ Error deleting product!'));
       }
     }
   };
 
   return (
     <div className="farmer-product-section">
-      <h2>{t('Produktet e mia', 'My Products')}</h2>
+      <h2>{t('📦 Produktet e Mia', '📦 My Products')}</h2>
       <div className="product-grid">
         {products.map(p => (
           <div key={p.id} className="product-card">
@@ -108,7 +119,6 @@ function FarmerProductManager({ lang, refresh, setRefresh = () => {} }) {
                   placeholder={t('Çmimi', 'Price')}
                 />
                 <input
-                  name="image"
                   type="file"
                   onChange={handleImageChange}
                 />
@@ -119,10 +129,10 @@ function FarmerProductManager({ lang, refresh, setRefresh = () => {} }) {
                     className="product-image"
                   />
                 )}
-                <div>
-                  <button onClick={handleSave}>{t('Ruaj Ndryshimet', 'Save Changes')}</button>
+                <div className="button-group">
+                  <button onClick={handleSave}>{t('💾 Ruaj Ndryshimet', '💾 Save Changes')}</button>
                   <button onClick={() => setEditingId(null)} style={{ marginLeft: '10px' }}>
-                    {t('Anulo', 'Cancel')}
+                    {t('❌ Anulo', '❌ Cancel')}
                   </button>
                 </div>
               </>
@@ -138,10 +148,10 @@ function FarmerProductManager({ lang, refresh, setRefresh = () => {} }) {
                     className="product-image"
                   />
                 )}
-                <div>
-                  <button onClick={() => handleEditClick(p)}>{t('Ndrysho', 'Edit')}</button>
+                <div className="button-group">
+                  <button onClick={() => handleEditClick(p)}>{t('✏️ Ndrysho', '✏️ Edit')}</button>
                   <button onClick={() => handleDelete(p.id)} style={{ marginLeft: '10px' }}>
-                    {t('Fshi', 'Delete')}
+                    {t('🗑️ Fshi', '🗑️ Delete')}
                   </button>
                 </div>
               </>
