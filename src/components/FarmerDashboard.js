@@ -14,27 +14,18 @@ function FarmerDashboard({ lang }) {
 
   return (
     <div className="farmer-dashboard">
-      <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>
-        {t('👨‍🌾 Paneli i Fermerit', '👨‍🌾 Farmer Panel')}
-      </h2>
+      <h2 style={{ textAlign: 'center' }}>{t('Paneli i Fermerit', 'Farmer Panel')}</h2>
 
-      {/* ✅ Shto produktin e ri */}
-      <section>
-        <h3>{t('Shto Produkt', 'Add Product')}</h3>
-        <AddProduct lang={lang} onProductAdded={handleRefresh} />
-      </section>
+      {/* Shto produkt */}
+      <AddProduct lang={lang} onProductAdded={handleRefresh} />
 
-      {/* ✅ Menaxho produktet e mia */}
-      <section style={{ marginTop: '30px' }}>
-        <h3>{t('Produktet e Mia', 'My Products')}</h3>
-        <FarmerProductManager lang={lang} refresh={refresh} />
-      </section>
+      {/* Menaxho produktet e mia */}
+      <FarmerProductManager lang={lang} refresh={refresh} />
 
-      {/* ✅ Shfaq kërkesat e blerjes nga konsumatorët */}
-      <section style={{ marginTop: '30px' }}>
-        <h3>{t('Kërkesat për Blerje', 'Purchase Requests')}</h3>
+      {/* Shfaq kërkesat e blerjes nga konsumatorët */}
+      <div style={{ marginTop: '30px' }}>
         <FarmerOrders fermeri={username} />
-      </section>
+      </div>
     </div>
   );
 }
