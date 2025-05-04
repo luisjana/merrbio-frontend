@@ -1,18 +1,27 @@
 import axios from 'axios';
 import { useEffect, useState, useContext } from 'react';
-import { AppContext } from '../context/AppContext'; // Importo context-in
+import { AppContext } from '../context/AppContext';
 
 export const FarmerOrders = ({ fermeri }) => {
   const [orders, setOrders] = useState([]);
-  const { lang } = useContext(AppContext); // Merr gjuhën nga context-i
-
+  const [loading, setLoading] = useState(true);
+  const { lang } = useContext(AppContext);
   const t = (sq, en) => (lang === 'sq' ? sq : en);
 
   useEffect(() => {
-    axios.get(`https://merrbio-backend.onrender.com/orders/${fermeri}`)
-      .then(res => setOrders(res.data))
-      .catch(err => console.error(err));
-  }, [fermeri]);
+    const fetchOrders = async () => {
+      try {
+        const res = await axios.get(`https://merrbio-backend.onrender.com/orders/${fermeri}`);
+        setOrders(res.data);
+      } catch (err) {
+        console.error(err);
+        alert(t('Gabim gjatë ngarkimit të kërkesave!', 'Error loading requests!'));
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchOrders();
+  }, [fermeri, t]);
 
   const updateStatus = async (id, status) => {
     try {
@@ -32,13 +41,23 @@ export const FarmerOrders = ({ fermeri }) => {
     return 'black';
   };
 
+  const groupedOrders = {
+    pending: orders.filter(o => o.status === 'pending'),
+    confirmed: orders.filter(o => o.status === 'confirmed'),
+    rejected: orders.filter(o => o.status === 'rejected'),
+  };
+
   return (
     <div style={{ textAlign: 'center' }}>
       <h2>{t('Kërkesat e mia për blerje', 'My Purchase Requests')}</h2>
-      {orders.length === 0 && <p>{t('Nuk ka kërkesa për momentin.', 'No requests at the moment.')}</p>}
-      {orders
-        .filter(order => order.status === 'pending')
-        .map(order => (
+
+      {loading && <p>{t('Duke ngarkuar...', 'Loading...')}</p>}
+      {!loading && orders.length === 0 && (
+        <p>{t('Nuk ka kërkesa për momentin.', 'No requests at the moment.')}</p>
+      )}
+
+      {['pending', 'confirmed', 'rejected'].map((statusKey) =>
+        groupedOrders[statusKey].map(order => (
           <div key={order.id} style={{
             border: '1px solid #ccc',
             padding: '10px',
@@ -71,7 +90,8 @@ export const FarmerOrders = ({ fermeri }) => {
               </div>
             )}
           </div>
-        ))}
+        ))
+      )}
     </div>
   );
 };

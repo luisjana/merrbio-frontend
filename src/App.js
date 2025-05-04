@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
 import Auth from './components/Auth';
@@ -12,19 +12,21 @@ import './components/style.css';
 import './App.css';
 
 function App() {
-  const [role, setRole] = useState(null);
-  const [username, setUsername] = useState(null);
-
-  const { lang, setLang, dark, setDark } = useContext(AppContext);
+  const { lang, dark, role, username, dispatch } = useContext(AppContext);
 
   useEffect(() => {
-    const savedRole = localStorage.getItem('role');
-    const savedUsername = localStorage.getItem('username');
-    if (savedRole && savedUsername) {
-      setRole(savedRole);
-      setUsername(savedUsername);
+    try {
+      const savedRole = localStorage.getItem('role');
+      const savedUsername = localStorage.getItem('username');
+      if (savedRole && savedUsername) {
+        dispatch({ type: 'SET_ROLE', payload: savedRole });
+        dispatch({ type: 'SET_USERNAME', payload: savedUsername });
+      }
+    } catch (error) {
+      console.error('❌ Error loading from localStorage:', error);
+      alert('Error loading saved session. Please log in again.');
     }
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     document.body.classList.toggle('dark', dark);
@@ -35,8 +37,8 @@ function App() {
   const handleLogout = () => {
     localStorage.removeItem('role');
     localStorage.removeItem('username');
-    setRole(null);
-    setUsername(null);
+    localStorage.removeItem('token'); // ✅ SHTUAR: hiq token-in
+    dispatch({ type: 'LOGOUT' });
   };
 
   return (
@@ -50,14 +52,21 @@ function App() {
                 ? `👋 ${t('Mirësevini', 'Welcome')}, ${username}`
                 : `👋 ${t('Përshëndetje!', 'Hello!')}`}
             </span>
-
-            {username && <button onClick={handleLogout}>Dil</button>}
-
-            <button className="rounded-btn" onClick={() => setLang(lang === 'sq' ? 'en' : 'sq')}>
-              <span style={{ fontWeight: 'bold' }}>{lang === 'sq' ? '🇦🇱 Shqip' : 'En English'}</span>
+            {username && <button onClick={handleLogout}>{t('Dil', 'Logout')}</button>}
+            <button
+              className="rounded-btn"
+              onClick={() =>
+                dispatch({ type: 'SET_LANG', payload: lang === 'sq' ? 'en' : 'sq' })
+              }
+            >
+              <span style={{ fontWeight: 'bold' }}>
+                {lang === 'sq' ? '🇦🇱 Shqip' : 'En English'}
+              </span>
             </button>
-
-            <button className="rounded-btn" onClick={() => setDark(!dark)}>
+            <button
+              className="rounded-btn"
+              onClick={() => dispatch({ type: 'TOGGLE_DARK' })}
+            >
               {dark ? (
                 <>
                   ☀️ <span style={{ fontWeight: 'bold' }}>{t('Drita', 'Light Mode')}</span>
@@ -76,13 +85,25 @@ function App() {
             {!role ? (
               <Route
                 path="*"
-                element={<Auth onLogin={(r, u) => { setRole(r); setUsername(u); }} />}
+                element={
+                  <Auth
+                    onLogin={(r, u, token) => {
+                      dispatch({ type: 'SET_ROLE', payload: r });
+                      dispatch({ type: 'SET_USERNAME', payload: u });
+                      localStorage.setItem('role', r);
+                      localStorage.setItem('username', u);
+                      localStorage.setItem('token', token); // ✅ SHTO token-in
+                    }}
+                  />
+                }
               />
             ) : (
               <>
                 {role === 'fermer' && <Route path="/" element={<FarmerDashboard lang={lang} />} />}
                 {role === 'admin' && <Route path="/" element={<AdminPanel />} />}
-                {role === 'konsumator' && <Route path="/" element={<ConsumerPanel role={role} />} />}
+                {role === 'konsumator' && (
+                  <Route path="/" element={<ConsumerPanel role={role} />} />
+                )}
                 <Route path="*" element={<Navigate to="/" />} />
               </>
             )}
