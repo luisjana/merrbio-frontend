@@ -11,20 +11,19 @@ function Auth({ onLogin }) {
     password: '',
     role: 'konsumator',
   });
-  const [error, setError] = useState(''); // për mesazhe gabimi
 
-  const { lang, dispatch } = useContext(AppContext);
+  const [error, setError] = useState(''); // 🆕 për mesazh gabimi
+
+  const { lang } = useContext(AppContext);
   const navigate = useNavigate();
 
   const t = (sq, en) => (lang === 'sq' ? sq : en);
 
-  // Event handler për ndryshimin e inputeve
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    setError(''); // fshin gabimin kur përdoruesi fillon të shkruajë
+    setError(''); // fshij gabimin nëse përdoruesi po shtyp
   };
 
-  // Event handler për submit (login ose register)
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -34,7 +33,6 @@ function Auth({ onLogin }) {
       role: formData.role,
     };
 
-    // Validim i thjeshtë përpara dërgimit
     if (cleanedData.username.length < 3 || cleanedData.password.length < 6) {
       setError(t('Emri ≥3 shkronja dhe fjalëkalimi ≥6!', 'Username ≥3 characters and password ≥6!'));
       return;
@@ -45,18 +43,9 @@ function Auth({ onLogin }) {
     try {
       const res = await axios.post(`https://merrbio-backend.onrender.com/${endpoint}`, cleanedData);
       alert(res.data.message);
-
-      // Ruaj në localStorage
       localStorage.setItem('role', res.data.role);
       localStorage.setItem('username', res.data.username);
-
-      // Përditëso context
-      dispatch({ type: 'SET_ROLE', payload: res.data.role });
-      dispatch({ type: 'SET_USERNAME', payload: res.data.username });
-
-      // Njofto App.js (opsionale — mund ta heqësh nëse nuk e përdor më)
-      if (onLogin) onLogin(res.data.role, res.data.username);
-
+      onLogin(res.data.role, res.data.username);
       navigate('/');
     } catch (err) {
       console.error('Gabim në kërkesën e API-së:', err.response?.data || err.message);
@@ -129,7 +118,7 @@ function Auth({ onLogin }) {
               )}
             </div>
 
-            {/* Mesazhi i gabimit */}
+            {/* 🔴 Mesazhi i gabimit */}
             {error && (
               <p style={{ color: 'red', marginTop: '10px', fontWeight: 'bold' }}>
                 {error}

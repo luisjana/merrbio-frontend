@@ -3,16 +3,12 @@ import axios from 'axios';
 export const handleOrder = async (productId, lang) => {
   const t = (sq, en) => (lang === 'sq' ? sq : en);
 
-  const name = prompt(t('Shkruaj emrin tënd:', 'Enter your name:'))?.trim();
-  const contact = prompt(t('Shkruaj numrin e kontaktit:', 'Enter your contact number:'))?.trim();
-
-  if (!name || name.length < 3) {
-    alert(t('Emri duhet të ketë ≥3 shkronja.', 'Name must be ≥3 characters.'));
-    return false;
-  }
-  if (!contact || contact.length < 6) {
-    alert(t('Numri duhet të ketë ≥6 shifra.', 'Contact must be ≥6 digits.'));
-    return false;
+  const name = prompt(t('Shkruaj emrin tënd:', 'Enter your name:'));
+  const contact = prompt(t('Shkruaj numrin e kontaktit:', 'Enter your contact number:'));
+  
+  if (!name || !contact) {
+    alert(t('Emri dhe kontakti janë të detyrueshëm.', 'Name and contact are required.'));
+    return;
   }
 
   try {
@@ -21,15 +17,9 @@ export const handleOrder = async (productId, lang) => {
       buyerName: name,
       buyerContact: contact,
     });
-    alert(t('✅ Kërkesa u dërgua me sukses!', '✅ Request sent successfully!'));
-    return true;
+    alert(t('Kërkesa u dërgua me sukses!', 'Request sent successfully!'));
   } catch (err) {
     console.error(err);
-    alert(
-      t('❌ Gabim gjatë dërgimit të kërkesës.', '❌ Error sending request.') +
-        ' ' +
-        (err.response?.data?.message || err.message)
-    );
-    return false;
+    alert(t('Gabim gjatë dërgimit të kërkesës.', 'Error sending request.'));
   }
 };
