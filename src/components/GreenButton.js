@@ -1,8 +1,7 @@
-// components/CustomButton.js
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export default function CustomButton({ onClick, children }) {
+export default function GreenButton({ onClick, children }) {
   return (
     <button
       onClick={onClick}
@@ -21,7 +20,7 @@ export default function CustomButton({ onClick, children }) {
   );
 }
 
-CustomButton.propTypes = {
+GreenButton.propTypes = {
   onClick: PropTypes.func.isRequired,
   children: PropTypes.node.isRequired,
 };

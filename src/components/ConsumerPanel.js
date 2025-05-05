@@ -1,13 +1,15 @@
 import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
-import { AppContext } from '../context/AppContext'; // Importo contextin
+import { AppContext } from '../context/AppContext';
 import './ConsumerPanel.css';
+import PropTypes from 'prop-types';
+import GreenButton from './GreenButton';
 
 function ConsumerPanel({ role }) {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
 
-  const { lang } = useContext(AppContext); // Merr lang nga Context
+  const { lang } = useContext(AppContext);
 
   const t = (sq, en) => (lang === 'sq' ? sq : en);
 
@@ -25,7 +27,7 @@ function ConsumerPanel({ role }) {
       alert('Emri dhe numri janë të detyrueshëm!');
       return;
     }
-  
+
     try {
       await axios.post('https://merrbio-backend.onrender.com/orders', {
         productId: product.id,
@@ -38,12 +40,6 @@ function ConsumerPanel({ role }) {
       alert('Gabim gjatë dërgimit të kërkesës.');
     }
   };
-  
-
-  // ✅ Butoni për mesazh është hequr — nuk përdoret më:
-  // const handleMessage = (product) => {
-  //   alert(t('Hapet dritarja për mesazh te', 'Open chat window to') + ' ' + product.fermeri);
-  // };
 
   return (
     <div className="product-section">
@@ -76,12 +72,9 @@ function ConsumerPanel({ role }) {
 
               <div className="button-group">
                 {(role === 'konsumator' || !role) && (
-                  <>
-                    <button onClick={() => handleRequest(p)}>
-                      {t('Bëj kërkesë për blerje', 'Request to Buy')}
-                    </button>
-                    {/* ❌ Butoni "Dërgo mesazh" u hoq për kërkesën tënde */}
-                  </>
+                  <GreenButton onClick={() => handleRequest(p)}>
+                    {t('Bëj kërkesë për blerje', 'Request to Buy')}
+                  </GreenButton>
                 )}
               </div>
             </div>
@@ -90,5 +83,9 @@ function ConsumerPanel({ role }) {
     </div>
   );
 }
+
+ConsumerPanel.propTypes = {
+  role: PropTypes.string,
+};
 
 export default ConsumerPanel;

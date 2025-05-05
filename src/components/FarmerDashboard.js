@@ -3,7 +3,7 @@ import AddProduct from './AddProduct';
 import FarmerProductManager from './FarmerProductManager';
 import { FarmerOrders } from './getOrders';
 import './FarmerDashboard.css';
-
+import PropTypes from 'prop-types';
 function FarmerDashboard({ lang }) {
   const [refresh, setRefresh] = useState(false);
   const username = localStorage.getItem('username');
@@ -31,3 +31,7 @@ function FarmerDashboard({ lang }) {
 }
 
 export default FarmerDashboard;
+
+FarmerDashboard.propTypes = {
+  lang: PropTypes.string.isRequired,
+};

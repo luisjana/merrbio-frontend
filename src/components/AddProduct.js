@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { AppContext } from '../context/AppContext'; // Importo contextin
+import PropTypes from 'prop-types';
 
 function AddProduct({ onProductAdded }) {
   const [emri, setEmri] = useState('');
@@ -107,3 +108,8 @@ function AddProduct({ onProductAdded }) {
 }
 
 export default AddProduct;
+
+AddProduct.propTypes = {
+  lang: PropTypes.string.isRequired,
+  onProductAdded: PropTypes.func,
+};

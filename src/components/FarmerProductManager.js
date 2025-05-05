@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './FarmerProductManager.css';
+import PropTypes from 'prop-types';
 
 function FarmerProductManager({ lang, refresh, setRefresh = () => {} }) {
   const [products, setProducts] = useState([]);
@@ -154,3 +155,10 @@ function FarmerProductManager({ lang, refresh, setRefresh = () => {} }) {
 }
 
 export default FarmerProductManager;
+
+
+FarmerProductManager.propTypes = {
+  lang: PropTypes.string.isRequired,
+  refresh: PropTypes.bool.isRequired,
+  setRefresh: PropTypes.func,
+};
