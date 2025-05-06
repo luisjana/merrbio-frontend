@@ -4,6 +4,7 @@ import FarmerProductManager from './FarmerProductManager';
 import { FarmerOrders } from './getOrders';
 import './FarmerDashboard.css';
 import PropTypes from 'prop-types';
+
 function FarmerDashboard({ lang }) {
   const [refresh, setRefresh] = useState(false);
   const username = localStorage.getItem('username');
